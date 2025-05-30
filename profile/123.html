@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Giới thiệu Sinh viên CNTT</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet"/>
+  <style>
+    .fade-in {
+      animation: fadeIn 2s ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile-card {
+      transition: all 0.3s ease-in-out;
+    }
+
+    .profile-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+      background-color: #f0f4ff;
+      text-align: center;
+    }
+
+    .profile-card:hover p {
+      color: #4f46e5;
+      text-align: center;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-purple-200 min-h-screen flex flex-col items-center py-10">
+
+  <!-- Header Logo Section -->
+  <div class="bg-white rounded-xl px-8 py-4 mb-8 text-center shadow-md">
+    <div class="flex items-center justify-center space-x-10">
+      <img src="upt.png" alt="Logo UPT" class="w-20 h-20 object-contain">
+      <img src="fit.jpg" alt="Logo FIT" class="w-20 h-20 object-contain">
+    </div>
+    <p class="mt-3 text-lg font-semibold text-gray-700">Đại học Phan Thiết - Khoa Công nghệ Thông tin</p>
+  </div>
+
+  <!-- Title -->
+  <h1 class="text-4xl font-bold text-gray-800 mb-10 fade-in">Thông tin Sinh viên CNTT</h1>
+
+  <!-- Student Profiles -->
+  <!-- Student Profiles -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 px-4 fade-in">
+
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center profile-card">
+    <img src="tu.jpg" alt="THÔNG MINH THUẬN" class="rounded-full mx-auto w-32 h-32 object-cover mb-4">
+    <h2 class="text-xl font-semibold">Nhóm Trưởng: THÔNG MINH THUẬN</h2>
+    <p class="text-sm text-gray-500 mb-2">MSSV: K16THO0060</p>
+    <p class="text-gray-600">Fullstack dev tương lai, mê viết code và uống cà phê đêm.</p>
+    <p class="italic text-indigo-500 mt-2">"Code là đam mê, deadline là động lực!"</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center profile-card">
+    <img src="hoai.jpg" alt="LƯƠNG LÊ TÍN" class="rounded-full mx-auto w-32 h-32 object-cover mb-4">
+    <h2 class="text-xl font-semibold">Thành Viên: LƯƠNG LÊ TÍN</h2>
+    <p class="text-sm text-gray-500 mb-2">MSSV: K16THO0061</p>
+    <p class="text-gray-600">Frontend mượt mà, thiết kế UI xịn sò, thích Figma và React.</p>
+    <p class="italic text-indigo-500 mt-2">"Thiết kế không chỉ là đẹp, mà còn là trải nghiệm."</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-lg p-6 text-center profile-card">
+    <img src="an.jpg" alt="HOÀNG PHƯƠNG" class="rounded-full mx-auto w-32 h-32 object-cover mb-4">
+    <h2 class="text-xl font-semibold">Thành Viên:HOÀNG PHƯƠNG</h2>
+    <p class="text-sm text-gray-500 mb-2">MSSV: K16THO0044</p>
+    <p class="text-gray-600">Yêu Python, chuyên trị AI & Machine Learning.</p>
+    <p class="italic text-indigo-500 mt-2">"Dữ liệu là dầu mỏ, Python là máy khoan."</p>
+  </div>
+
+ 
+
+</div>
+
+</body>
+</html>
