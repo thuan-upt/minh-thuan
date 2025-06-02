@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Đăng nhập</title>
+  <style>
+    body {
+      background-image: url("https://mega.com.vn/media/news/1406_hinh-nen-doraemon-4k32.jpg");
+      background-size: cover;
+      font-family: Arial, sans-serif;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px;
+      border-radius: 10px;
+      width: 300px;
+      margin: 150px auto;
+      text-align: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    input {
+      width: 90%;
+      padding: 10px;
+      margin: 10px 0;
+    }
+
+    button {
+      padding: 10px 20px;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #0097a7;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>Đăng Nhập</h2>
+    <input type="text" id="username" placeholder="Tên đăng nhập"><br>
+    <input type="password" id="password" placeholder="Mật khẩu"><br>
+    <button onclick="login()">Đăng nhập</button>
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      // Kiểm tra tài khoản mẫu: admin / 123
+      if (username === "thuan" && password === "1234") {
+        window.location.href = "home.html";
+      }
+      else{
+        document.getElementById("error").textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+      }
+    }
+  </script>
+</body>
+</html>
