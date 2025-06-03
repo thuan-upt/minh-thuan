@@ -1,8 +1,12 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Đăng nhập</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
   <style>
     body {
       background-image: url("https://mega.com.vn/media/news/1406_hinh-nen-doraemon-4k32.jpg");
@@ -14,7 +18,7 @@
       background: rgba(255, 255, 255, 0.9);
       padding: 30px;
       border-radius: 10px;
-      width: 300px;
+      width: 320px;
       margin: 150px auto;
       text-align: center;
       box-shadow: 0 0 10px rgba(0,0,0,0.5);
@@ -32,19 +36,43 @@
       color: white;
       border: none;
       border-radius: 5px;
+      cursor: pointer;
     }
 
     button:hover {
       background-color: #0097a7;
     }
+
+    .g_id_signin {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+    }
   </style>
 </head>
 <body>
   <div class="login-container">
-    <h2>Đăng Nhập</h2>
+    <h2>🐱‍👓 Đăng Nhập</h2>
+    
     <input type="text" id="username" placeholder="Tên đăng nhập"><br>
     <input type="password" id="password" placeholder="Mật khẩu"><br>
     <button onclick="login()">Đăng nhập</button>
+
+    <div id="g_id_onload"
+         data-client_id="YOUR_GOOGLE_CLIENT_ID"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+
     <p id="error" style="color:red;"></p>
   </div>
 
@@ -53,13 +81,34 @@
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
 
-      // Kiểm tra tài khoản mẫu: admin / 123
-      if (username === "thuan" && password === "1234") {
+      if (username === "thuan" && password === "9999") {
+        localStorage.setItem("user", JSON.stringify({ name: username }));
         window.location.href = "home.html";
+      } else {
+        const error = document.getElementById("error");
+        error.textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+        setTimeout(() => error.textContent = "", 3000);
       }
-      else{
-        document.getElementById("error").textContent = "Sai tên đăng nhập hoặc mật khẩu!";
-      }
+    }
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
+      return JSON.parse(jsonPayload);
+    }
+
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      console.log("Google user:", data);
+
+      // Lưu thông tin người dùng
+      localStorage.setItem("user", JSON.stringify(data));
+
+      // Điều hướng
+      window.location.href = "home.html";
     }
   </script>
 </body>
