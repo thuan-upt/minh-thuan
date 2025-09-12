@@ -1,0 +1,741 @@
+
+:root {
+    --primary-color: #3b608e;
+    --secondary-color: #648cbe;
+    --accent-color: #ff6552;
+    --text-dark: #1f2937;
+    --text-light: #4b5563;
+    --background-light: #f3f7fb;
+    --background-white: #ffffff;
+    --font-primary: 'Inter', sans-serif;
+    --font-heading: 'Pattaya', sans-serif;
+    --font-special: 'Pacifico', cursive;
+    --border-radius: 8px;
+    --box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    --transition: all 0.3s ease-in-out;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: var(--font-primary);
+    font-size: 16px;
+    line-height: 1.6;
+    color: var(--text-light);
+    background-color: var(--background-white);
+}
+
+.nutclick{
+    margin: 0 auto;
+    text-align: center;
+    background-color: rgb(140, 184, 140);
+    color: black;
+   
+    border-radius: 20px;
+    height: 40px;
+    width: 180px;
+}
+.nutclick:hover{
+    background-color: red;
+    color: white;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+    transition: var(--transition);
+}
+
+ul {
+    list-style: none;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* 2. UTILITY CLASSES */
+.section-subtitle {
+    color: var(--primary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.section-title {
+    color: var(--text-dark);
+    font-size: 36px;
+    font-weight: 800;
+    margin-bottom: 24px;
+    line-height: 1.3;
+}
+
+/* 3. HEADER STYLES */
+/* - Top Header */
+.top-header {
+    background-color: #f3f7fb;
+    padding: 10px 0;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.top-header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.contact-info a {
+    margin: 0 10px;
+}
+
+.contact-info a:hover {
+    color: var(--text-dark);
+}
+
+.contact-info i {
+    margin-right: 5px;
+}
+
+.contact-info .separator {
+    display: inline-block;
+    width: 1px;
+    height: 16px;
+    background-color: #ecf1f9;
+    vertical-align: middle;
+}
+
+.language-switcher a {
+    margin-left: 10px;
+}
+
+.language-switcher img {
+    width: 20px;
+    height: auto;
+}
+
+/* - Main Navigation */
+.main-nav {
+    background-color: var(--background-white);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+}
+
+.main-nav.scrolled {
+    padding: 10px 0;
+}
+
+.main-nav .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo img {
+    max-height: 50px;
+    transition: var(--transition);
+}
+
+.main-nav.scrolled .logo img {
+     max-height: 45px;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 30px;
+}
+
+.nav-link {
+    font-size: 16px;
+    font-weight: 800;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    padding: 5px 0;
+    border-bottom: 4px solid transparent;
+}
+
+.nav-link:hover, .nav-link.active {
+    color: var(--secondary-color);
+    border-bottom-color: var(--accent-color);
+}
+
+.mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+/* 4. HERO SECTION */
+.hero-section {
+    position: relative;
+    height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--background-white);
+    overflow: hidden;
+}
+
+.hero-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://cdn2.fptshop.com.vn/unsafe/1920x0/filters:format(webp):quality(75)/2023_11_30_638369761126654558_hinh-nen-con-cho-39.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.hero-background::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(15, 34, 57, 0.7);
+}
+
+.hero-content h1 {
+    font-family: var(--font-heading);
+    font-size: 64px;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.hero-content h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 20px;
+     text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+.hero-content p {
+    font-size: 18px;
+    max-width: 600px;
+    margin: 0 auto 30px;
+}
+
+/* 5. ABOUT SECTION */
+.about-section {
+    padding: 80px 0;
+    background: var(--background-light);
+}
+
+.about-section .container {
+    display: flex;
+    align-items: center;
+    gap: 50px;
+}
+
+.about-image-column {
+    flex: 0 0 45%;
+}
+
+.about-image-column img {
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+}
+
+.about-content-column {
+    flex: 1;
+}
+
+.about-text {
+    margin-bottom: 20px;
+}
+
+.about-features {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 30px;
+}
+
+.feature-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+    color: var(--text-dark);
+}
+
+.feature-item i {
+    color: var(--primary-color);
+}
+
+/* 6. COURSES SECTION */
+.courses-section {
+    padding: 80px 0;
+    background-image: url('https://vutuananhdev.id.vn/datafiles/web30s/upload/images/1101-1200/30S-03-1194/course_bg_1.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.courses-section .section-title, .courses-section .section-subtitle {
+    text-align: center;
+}
+
+/* 7. BLOG SECTION */
+.blog-section {
+    padding: 80px 0;
+    background-color: var(--background-light);
+}
+
+.blog-section .section-title, .blog-section .section-subtitle {
+    text-align: center;
+}
+
+.blog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 30px;
+    margin-top: 40px;
+}
+
+/* 8. FOOTER STYLES */
+/* - Main Footer */
+.footer {
+    background-image: url('https://vutuananhdev.id.vn/datafiles/web30s/upload/images/1101-1200/30S-03-1194/footer-bg.png');
+    background-size: cover;
+    background-position: center;
+    color: var(--background-light);
+}
+
+.footer-main {
+    padding: 60px 0 40px;
+}
+
+.footer-main .container {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1.5fr;
+    gap: 50px;
+}
+
+.footer-logo {
+    width: 100px;
+    margin-bottom: 20px;
+}
+
+.footer-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--background-white);
+    margin-bottom: 20px;
+    text-transform: capitalize;
+}
+
+.about-us p {
+    font-size: 15px;
+    color: #b3c1d3;
+    margin-bottom: 20px;
+}
+
+.social-media {
+    display: flex;
+    gap: 10px;
+}
+
+.social-media a {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background-color: #1e2c46;
+    color: #b3c1d3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}
+
+.social-media a:hover {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+}
+
+.quick-links ul li a {
+    color: #b3c1d3;
+    padding: 5px 0;
+    display: block;
+}
+
+.quick-links ul li a:hover {
+    color: var(--primary-color);
+}
+
+.newsletter-form {
+    display: flex;
+    margin-top: 10px;
+}
+
+.newsletter-form input {
+    flex-grow: 1;
+    border: 1px solid var(--primary-color);
+    background: transparent;
+    padding: 12px 15px;
+    color: var(--background-white);
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    outline: none;
+}
+
+.newsletter-form input::placeholder {
+    color: #b3c1d3;
+}
+
+.newsletter-form button {
+    border: none;
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 0 var(--border-radius) var(--border-radius) 0;
+    transition: var(--transition);
+}
+
+.newsletter-form button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* - Bottom Footer */
+.footer-bottom {
+    padding: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    text-align: center;
+    font-size: 15px;
+    color: #b3c1d3;
+}
+
+.footer-bottom a {
+    color: #b3c1d3;
+    font-weight: 500;
+}
+.footer-bottom a:hover {
+    color: var(--primary-color);
+}
+
+/* 9. COMPONENTS */
+/* - Buttons */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 28px;
+    border-radius: var(--border-radius);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 14px;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.btn-primary {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+    box-shadow: 0 4px 10px rgba(59, 96, 142, 0.3);
+}
+
+.btn-primary:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+}
+
+.btn-nav {
+    padding: 15px 30px;
+}
+
+.btn-secondary {
+    background-color: var(--accent-color);
+    color: var(--background-white);
+}
+.btn-secondary:hover {
+    background-color: #e55a4a;
+}
+
+/* - Course Card */
+.course-card {
+    background: var(--background-white);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+    box-shadow: var(--box-shadow);
+    transition: var(--transition);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.course-image {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+
+.course-info {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-title {
+    font-size: 18px;
+    color: var(--text-dark);
+    font-weight: 700;
+    margin-bottom: 10px;
+    height: 54px; /* for 2 lines */
+    overflow: hidden;
+}
+
+.course-desc {
+    font-size: 14px;
+    flex-grow: 1;
+    margin-bottom: 15px;
+}
+
+.course-price {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--accent-color);
+    margin-bottom: 15px;
+}
+
+
+/* - Blog Card */
+.blog-card {
+    background: var(--background-white);
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.blog-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+}
+
+.blog-image {
+     width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+}
+.blog-content {
+    padding: 25px;
+}
+
+.blog-meta {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-bottom: 15px;
+}
+
+.blog-meta span {
+    margin-right: 15px;
+}
+
+.blog-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    line-height: 1.4;
+    height: 56px; /* for 2 lines */
+    overflow: hidden;
+}
+
+.blog-readmore {
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.blog-readmore:hover {
+    color: var(--accent-color);
+}
+
+/* - Swiper Slider */
+.swiper-pagination-bullet {
+    background: var(--primary-color);
+    opacity: 0.5;
+}
+.swiper-pagination-bullet-active {
+    opacity: 1;
+}
+
+/* 10. SCROLL TO TOP BUTTON */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--background-white);
+    color: var(--primary-color);
+    border: 3px solid var(--primary-color);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: var(--transition);
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.scroll-to-top:hover {
+    background-color: var(--primary-color);
+    color: var(--background-white);
+}
+.btn_top {
+    background: rgb(141, 153, 78);
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
+    display: none; /* ban đầu ẩn */
+    position: absolute;   /* cố định theo màn hình */
+    bottom: 20px;      /* cách mép dưới 20px */
+    right: 20px;       /* cách mép phải 20px */
+    cursor: pointer;
+    text-align: center;
+    line-height: 60px;
+    font-size: 28px;
+    color: white;
+}
+.btn_top:hover {
+    background: green;
+}
+
+
+/* 11. RESPONSIVE DESIGN */
+@media (max-width: 1024px) {
+    .nav-menu {
+        display: none;
+        flex-direction: column;
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 300px;
+        height: 100vh;
+        background-color: var(--background-white);
+        padding-top: 80px;
+        box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+        transition: right 0.4s ease;
+        gap: 0;
+    }
+    
+    .nav-menu.active {
+        right: 0;
+    }
+
+    .nav-item {
+        width: 100%;
+    }
+    
+    .nav-link {
+        display: block;
+        padding: 15px 25px;
+        border-bottom: 1px solid #eee;
+    }
+     .nav-link:hover, .nav-link.active {
+        border-bottom-color: #eee;
+        background-color: #f9f9f9;
+    }
+    
+    .mobile-menu-toggle {
+        display: block;
+    }
+    
+    .btn-nav {
+        display: none;
+    }
+
+    .about-section .container {
+        flex-direction: column;
+    }
+
+    .footer-main .container {
+        grid-template-columns: 1fr 1fr;
+    }
+    .about-us {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title {
+        font-size: 28px;
+    }
+    
+    .hero-content h1 {
+        font-size: 48px;
+    }
+    
+    .hero-content h2 {
+        font-size: 22px;
+    }
+
+    .about-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .footer-main .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .footer-logo, .social-media, .newsletter-form {
+        margin-left: auto;
+        margin-right: auto;
+        justify-content: center;
+    }
+
+    .footer-bottom .container {
+        flex-direction: column;
+    }
+}
