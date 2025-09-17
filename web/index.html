@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="vi">
 <head>
@@ -29,6 +28,8 @@
       width: 90%;
       padding: 10px;
       margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
     }
 
     button {
@@ -38,6 +39,7 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+      width: 100%;
     }
 
     button:hover {
@@ -59,14 +61,13 @@
     <input type="password" id="password" placeholder="Mật khẩu"><br>
     <button onclick="login()">Đăng nhập</button>
 
+    <!-- Google Sign In -->
     <div id="g_id_onload"
          data-client_id="486230673080-7mftkfetqurptl9r6g13vqj5gaq28rmf.apps.googleusercontent.com"
          data-callback="handleCredentialResponse"
          data-auto_prompt="false">
     </div>
 
- 
-    
     <div class="g_id_signin"
          data-type="standard"
          data-size="large"
@@ -78,11 +79,42 @@
 
     <p id="error" style="color:red;"></p>
   </div>
+
+  <!-- Script phải viết đúng -->
+  <script>
+    function login() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (username === "thuan" && password === "9999") {
+        localStorage.setItem("user", JSON.stringify({ name: username }));
+        window.location.href = "home.html";
+      } else {
+        const error = document.getElementById("error");
+        error.textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+        setTimeout(() => error.textContent = "", 3000);
+      }
+    }
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(atob(base64).split('').map(c =>
+        '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      ).join(''));
+      return JSON.parse(jsonPayload);
+    }
+
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      console.log("Google user:", data);
+
+      // Lưu thông tin người dùng
+      localStorage.setItem("user", JSON.stringify(data));
+
+      // Điều hướng
+      window.location.href = "home.html";
+    }
+  </script>
 </body>
-<srcipt src="srcipt.js"></srcipt>
 </html>
-
-
-
-
-
