@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <title>Đăng nhập</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+  <meta name="google-signin-client_id" content="486230673080-7mftkfetqurptl9r6g13vqj5gaq28rmf.apps.googleusercontent.com" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+  <style>
+    body {
+      background-image: url("https://mega.com.vn/media/news/1406_hinh-nen-doraemon-4k32.jpg");
+      background-size: cover;
+      background-position: center;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 25px;
+      border-radius: 12px;
+      width: 90%;
+      max-width: 350px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    h2 {
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .password-container {
+      position: relative;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      font-size: 18px;
+      background: none;
+      border: none;
+      color: #00bcd4;
+      padding: 0;
+    }
+
+    button.login-btn {
+      width: 100%;
+      padding: 12px;
+      background-color: #00bcd4;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    button.login-btn:hover {
+      background-color: #0097a7;
+    }
+
+    .g_id_signin {
+      margin-top: 15px;
+      display: flex;
+      justify-content: center;
+    }
+
+    #error {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <h2>🐱‍👓 Đăng Nhập</h2>
+    
+    <input type="text" id="username" placeholder="Tên đăng nhập">
+
+    <div class="password-container">
+      <input type="password" id="password" placeholder="Mật khẩu">
+      <button type="button" class="toggle-password" onclick="togglePassword()">👁</button>
+    </div>
+
+    <button class="login-btn" onclick="login()">Đăng nhập</button>
+
+    <!-- Google Sign-In -->
+    <div id="g_id_onload"
+         data-client_id="486230673080-7mftkfetqurptl9r6g13vqj5gaq28rmf.apps.googleusercontent.com"
+         data-callback="handleCredentialResponse"
+         data-auto_prompt="false">
+    </div>
+    
+    <div class="g_id_signin"
+         data-type="standard"
+         data-size="large"
+         data-theme="outline"
+         data-text="sign_in_with"
+         data-shape="rectangular"
+         data-logo_alignment="left">
+    </div>
+
+    <p id="error" style="color:red;"></p>
+  </div>
+
+  <script>
+    function login() {
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+
+      if (username === "thuan" && password === "9999") {
+        localStorage.setItem("user", JSON.stringify({ name: username }));
+        window.location.href = "home.html";
+      } else {
+        const error = document.getElementById("error");
+        error.textContent = "Sai tên đăng nhập hoặc mật khẩu!";
+        setTimeout(() => error.textContent = "", 3000);
+      }
+    }
+
+    function togglePassword() {
+      const passwordField = document.getElementById("password");
+      const toggleBtn = document.querySelector(".toggle-password");
+
+      if (passwordField.type === "password") {
+        passwordField.type = "text";
+        toggleBtn.textContent = "🙈";
+      } else {
+        passwordField.type = "password";
+        toggleBtn.textContent = "👁";
+      }
+    }
+
+    function parseJwt(token) {
+      const base64Url = token.split('.')[1];
+      const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+      const jsonPayload = decodeURIComponent(
+        atob(base64).split('').map(c =>
+          '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+        ).join('')
+      );
+      return JSON.parse(jsonPayload);
+    }
+
+    function handleCredentialResponse(response) {
+      const data = parseJwt(response.credential);
+      console.log("Google user:", data);
+      localStorage.setItem("user", JSON.stringify(data));
+      window.location.href = "home.html";
+    }
+
+    // Khi load trang -> focus ô username
+    window.onload = () => {
+      document.getElementById("username").focus();
+
+      // Bấm Enter sẽ login
+      document.addEventListener("keypress", (e) => {
+        if (e.key === "Enter") {
+          login();
+        }
+      });
+    };
+  </script>
+</body>
+</html>
