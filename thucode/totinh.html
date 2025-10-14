@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💘 Tỏ tình siêu lãng mạn</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(135deg, #ffd6e0, #fcb1d1);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow: hidden;
+    }
+
+    #questionContainer {
+      background: white;
+      padding: 30px 20px;
+      border-radius: 20px;
+      text-align: center;
+      width: 100%;
+      max-width: 500px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      z-index: 10;
+    }
+
+    .question {
+      font-size: 26px;
+      margin-bottom: 30px;
+      color: #d63384;
+      cursor: pointer;
+    }
+
+    .buttons {
+      position: relative;
+      height: 120px;
+    }
+
+    button {
+      padding: 14px 28px;
+      font-size: 16px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      position: absolute;
+      transition: all 0.3s ease;
+      white-space: nowrap;
+    }
+
+    #yesBtn {
+      background-color: #28a745;
+      color: white;
+      left: 80px;
+      top: 20px;
+    }
+
+    #noBtn {
+      background-color: #dc3545;
+      color: white;
+      left: 220px;
+      top: 20px;
+    }
+
+    #heartLoader {
+      display: none;
+      font-size: 18px;
+      margin-top: 30px;
+      animation: pulse 1s infinite;
+      color: #e83e8c;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+
+    #loveName {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 28px;
+      color: #ff1493;
+      font-weight: bold;
+      z-index: 1001;
+      display: none;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.5) translate(-50%, -50%); }
+      to { opacity: 1; transform: scale(1) translate(-50%, -50%); }
+    }
+
+    #nameForm {
+      margin-bottom: 20px;
+    }
+
+    #nameInput {
+      padding: 10px 15px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      width: 80%;
+      max-width: 300px;
+      margin-bottom: 10px;
+    }
+
+    #startBtn {
+      padding: 10px 20px;
+      border-radius: 20px;
+      background-color: #d63384;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+    }
+
+    .falling-heart {
+      position: fixed;
+      top: -50px;
+      font-size: 24px;
+      color: #ff6b9d;
+      animation: fall linear forwards;
+      z-index: 5;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+    }
+
+    @media (max-width: 480px) {
+      .question { font-size: 22px; }
+      button { font-size: 14px; padding: 10px 20px; }
+      #yesBtn { left: 40px; }
+      #noBtn { left: 160px; }
+    }
+
+    /* Canvas trái tim */
+    canvas#pinkboard {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: none;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <div id="loveName"></div>
+  <div id="questionContainer">
+    <div id="nameForm">
+      <input type="text" id="nameInput" placeholder="Nhập tên người yêu 💌" />
+      <br />
+      <button id="startBtn">Bắt đầu</button>
+    </div>
+
+    <h1 class="question" id="questionText" style="display: none;">
+      Em có yêu anh không? 💖
+    </h1>
+
+    <div class="buttons" style="display: none;" id="buttonGroup">
+      <button id="yesBtn">Có 😍</button>
+      <button id="noBtn">Không 😅</button>
+    </div>
+  </div>
+
+  <canvas id="pinkboard"></canvas>
+  <audio id="loveSound" src="https://www.fesliyanstudios.com/play-mp3/387"></audio>
+
+  <script>
+    const nameInput = document.getElementById("nameInput");
+    const startBtn = document.getElementById("startBtn");
+    const nameForm = document.getElementById("nameForm");
+    const questionText = document.getElementById("questionText");
+    const buttonGroup = document.getElementById("buttonGroup");
+    const yesBtn = document.getElementById("yesBtn");
+    const noBtn = document.getElementById("noBtn");
+    const loveSound = document.getElementById("loveSound");
+    const loveName = document.getElementById("loveName");
+    const canvas = document.getElementById("pinkboard");
+
+    let loverName = "";
+
+    startBtn.addEventListener("click", () => {
+      const name = nameInput.value.trim();
+      if (name) {
+        loverName = name;
+        questionText.textContent = `${name} ơi, em có yêu anh không? 💖`;
+        nameForm.style.display = "none";
+        questionText.style.display = "block";
+        buttonGroup.style.display = "block";
+      } else {
+        alert("Hãy nhập tên người yêu nha 🥰");
+      }
+    });
+
+    noBtn.addEventListener("mouseover", () => {
+      const containerRect = questionText.parentElement.getBoundingClientRect();
+      const btnRect = noBtn.getBoundingClientRect();
+      const maxX = containerRect.width - btnRect.width - 20;
+      const maxY = containerRect.height - btnRect.height - 20;
+      const newX = Math.floor(Math.random() * maxX);
+      const newY = Math.floor(Math.random() * maxY);
+      noBtn.style.left = `${newX}px`;
+      noBtn.style.top = `${newY}px`;
+    });
+
+    yesBtn.addEventListener("click", () => {
+      loveSound.play();
+      questionText.style.display = "none";
+      buttonGroup.style.display = "none";
+      canvas.style.display = "block";
+      loveName.textContent = `💘 ${loverName} 💘`;
+      loveName.style.display = "block";
+      startHeartAnimation();
+
+      setTimeout(() => {
+        canvas.style.display = "none";
+        loveName.style.display = "none";
+        nameForm.style.display = "block";
+        nameInput.value = "";
+      }, 25000);
+    });
+
+    function createFallingHearts() {
+      setInterval(() => {
+        const heart = document.createElement("div");
+        heart.classList.add("falling-heart");
+        heart.innerText = "💖";
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = Math.random() * 20 + 16 + "px";
+        heart.style.animationDuration = Math.random() * 3 + 4 + "s";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 7000);
+      }, 500);
+    }
+    createFallingHearts();
+
+    // 🌸 Hiệu ứng trái tim canvas
+    function startHeartAnimation() {
+      const settings = {
+        particles: { length: 2000, duration: 2, velocity: 100, effect: -1.3, size: 13 }
+      };
+
+      const Point = function (x, y) { this.x = x || 0; this.y = y || 0; };
+      Point.prototype.clone = function () { return new Point(this.x, this.y); };
+      Point.prototype.length = function (length) {
+        if (typeof length === 'undefined')
+          return Math.sqrt(this.x * this.x + this.y * this.y);
+        this.normalize();
+        this.x *= length; this.y *= length; return this;
+      };
+      Point.prototype.normalize = function () {
+        const len = this.length();
+        this.x /= len; this.y /= len; return this;
+      };
+
+      const Particle = function () { this.position = new Point(); this.velocity = new Point(); this.acceleration = new Point(); this.age = 0; };
+      Particle.prototype.initialize = function (x, y, dx, dy) {
+        this.position.x = x; this.position.y = y;
+        this.velocity.x = dx; this.velocity.y = dy;
+        this.acceleration.x = dx * settings.particles.effect;
+        this.acceleration.y = dy * settings.particles.effect;
+        this.age = 0;
+      };
+      Particle.prototype.update = function (deltaTime) {
+        this.position.x += this.velocity.x * deltaTime;
+        this.position.y += this.velocity.y * deltaTime;
+        this.velocity.x += this.acceleration.x * deltaTime;
+        this.velocity.y += this.acceleration.y * deltaTime;
+        this.age += deltaTime;
+      };
+      Particle.prototype.draw = function (ctx, img) {
+        const ease = t => (--t) * t * t + 1;
+        const size = img.width * ease(this.age / settings.particles.duration);
+        ctx.globalAlpha = 1 - this.age / settings.particles.duration;
+        ctx.drawImage(img, this.position.x - size / 2, this.position.y - size / 2, size, size);
+      };
+
+      const ParticlePool = function (length) {
+        this.particles = new Array(length).fill().map(() => new Particle());
+        this.firstActive = 0; this.firstFree = 0;
+      };
+      ParticlePool.prototype.add = function (x, y, dx, dy) {
+        const p = this.particles[this.firstFree];
+        p.initialize(x, y, dx, dy);
+        this.firstFree = (this.firstFree + 1) % this.particles.length;
+        if (this.firstFree === this.firstActive)
+          this.firstActive = (this.firstActive + 1) % this.particles.length;
+      };
+      ParticlePool.prototype.update = function (dt) {
+        const dur = settings.particles.duration;
+        let i = this.firstActive;
+        while (i !== this.firstFree) {
+          const p = this.particles[i];
+          p.update(dt);
+          if (p.age >= dur) {
+            this.firstActive = (this.firstActive + 1) % this.particles.length;
+          }
+          i = (i + 1) % this.particles.length;
+        }
+      };
+      ParticlePool.prototype.draw = function (ctx, img) {
+        let i = this.firstActive;
+        while (i !== this.firstFree) {
+          this.particles[i].draw(ctx, img);
+          i = (i + 1) % this.particles.length;
+        }
+      };
+
+      const ctx = canvas.getContext('2d');
+      const pool = new ParticlePool(settings.particles.length);
+      const particleRate = settings.particles.length / settings.particles.duration;
+      let time;
+
+      function pointOnHeart(t) {
+        return new Point(
+          160 * Math.pow(Math.sin(t), 3),
+          130 * Math.cos(t) - 50 * Math.cos(2 * t) - 20 * Math.cos(3 * t) - 10 * Math.cos(4 * t) + 25
+        );
+      }
+
+      const image = (() => {
+        const c = document.createElement('canvas');
+        const ctx2 = c.getContext('2d');
+        c.width = settings.particles.size;
+        c.height = settings.particles.size;
+        function to(t) {
+          const p = pointOnHeart(t);
+          p.x = settings.particles.size / 2 + p.x * settings.particles.size / 350;
+          p.y = settings.particles.size / 2 - p.y * settings.particles.size / 350;
+          return p;
+        }
+        ctx2.beginPath();
+        let t = -Math.PI;
+        let p = to(t);
+        ctx2.moveTo(p.x, p.y);
+        while (t < Math.PI) {
+          t += 0.01;
+          p = to(t);
+          ctx2.lineTo(p.x, p.y);
+        }
+        ctx2.closePath();
+        ctx2.fillStyle = '#FF5CA4';
+        ctx2.fill();
+        const img = new Image();
+        img.src = c.toDataURL();
+        return img;
+      })();
+
+      function render() {
+        requestAnimationFrame(render);
+        const newTime = new Date().getTime() / 1000;
+        const delta = newTime - (time || newTime);
+        time = newTime;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        const amount = particleRate * delta;
+        for (let i = 0; i < amount; i++) {
+          const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+          const dir = pos.clone().length(settings.particles.velocity);
+          pool.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+        }
+        pool.update(delta);
+        pool.draw(ctx, image);
+      }
+
+      function onResize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+      }
+
+      window.onresize = onResize;
+      setTimeout(() => { onResize(); render(); }, 10);
+    }
+  </script>
+</body>
+</html>

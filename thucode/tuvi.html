@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>🔮 Xem Bói Hiện Đại</title>
+<meta name="description" content="Trang xem bói giao diện hiện đại: Tarot, Tử vi, Thần số học.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1: #0f1724;
+    --bg2: #071028;
+    --glass: rgba(255,255,255,0.06);
+    --glass-2: rgba(255,255,255,0.04);
+    --accent: #8b5cf6;
+    --accent-2: #06b6d4;
+    --muted: #98a2b3;
+    --card-radius: 14px;
+    --max-width: 1100px;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+    background: radial-gradient(1200px 800px at 10% 10%, rgba(139,92,246,0.12), transparent 10%), linear-gradient(180deg,var(--bg1),var(--bg2));
+    color:#e6eef8; -webkit-font-smoothing:antialiased;
+    display:flex;align-items:center;justify-content:center;padding:28px;
+  }
+
+  .app {
+    width:100%; max-width:var(--max-width);
+    display:grid; grid-template-columns: 360px 1fr; gap:24px;
+  }
+  @media (max-width:980px){ .app{grid-template-columns:1fr;padding:12px} }
+
+  /* Left sidebar */
+  .sidebar{
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:var(--card-radius); padding:18px; position:relative;
+    box-shadow: 0 10px 30px rgba(4,6,12,0.5);
+    min-height:420px;
+  }
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+  .logo{width:56px;height:56px;border-radius:12px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;font-weight:800;color:white;font-size:18px;box-shadow:0 8px 20px rgba(7,18,40,0.6)}
+  .appTitle{font-weight:700;font-size:16px}
+  .appSub{font-size:13px;color:var(--muted);margin-top:2px}
+
+  .menu{margin-top:18px;display:flex;flex-direction:column;gap:10px}
+  .menu button{
+    background:transparent;border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:12px;color:inherit;text-align:left;cursor:pointer;
+    display:flex;gap:10px;align-items:center;font-weight:600;
+  }
+  .menu button.active{background:linear-gradient(90deg, rgba(139,92,246,0.14), rgba(6,182,212,0.04));border:1px solid rgba(255,255,255,0.08);box-shadow:0 6px 18px rgba(6,11,20,0.5)}
+  .muted{color:var(--muted);font-size:13px}
+
+  .controls{margin-top:16px;display:flex;flex-direction:column;gap:10px}
+  .controls label{font-size:13px;color:var(--muted)}
+  .controls input, .controls select{
+    width:100%;padding:10px;border-radius:10px;background:transparent;border:1px solid rgba(255,255,255,0.04);color:inherit;
+  }
+  .btnPrimary{
+    margin-top:10px;padding:12px;border-radius:12px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#041125;font-weight:700;cursor:pointer;
+    box-shadow:0 8px 18px rgba(6,11,20,0.7);
+  }
+
+  .smallNote{font-size:12px;color:var(--muted);margin-top:8px}
+
+  /* Right content */
+  .content{
+    min-height:420px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:var(--card-radius);padding:20px;position:relative;
+    box-shadow: 0 12px 36px rgba(0,0,0,0.5); overflow:hidden;
+  }
+
+  .headerRow{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px}
+  .headerRow h2{margin:0;font-size:18px}
+  .headerRow .actions{display:flex;gap:10px}
+
+  .cardArea{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  @media (max-width:980px){ .cardArea{grid-template-columns:repeat(2,1fr)} }
+  @media (max-width:520px){ .cardArea{grid-template-columns:1fr} }
+
+  .card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    border-radius:12px;padding:14px;min-height:160px;border:1px solid rgba(255,255,255,0.03);
+    display:flex;flex-direction:column;gap:12px;justify-content:space-between;
+  }
+  .card h3{margin:0;font-size:15px}
+  .card p{margin:0;color:var(--muted);font-size:13px}
+
+  /* Result area */
+  .result{
+    margin-top:16px;padding:16px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.03);
+    min-height:140px;position:relative;
+  }
+  .result h3{margin:0 0 8px 0}
+  .result .text{color:#eaf3ff;line-height:1.5}
+
+  /* Tarot visuals */
+  .tarotRow{display:flex;gap:8px;align-items:center;justify-content:center}
+  .cardBack{
+    width:78px;height:120px;border-radius:8px;background:linear-gradient(180deg,#0b1220,#08101b);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;
+    box-shadow:0 8px 20px rgba(6,10,20,0.6);cursor:pointer;transform-style:preserve-3d;transition:transform 600ms;
+  }
+  .cardBack.flip{transform:rotateY(180deg)}
+  .cardFace{
+    position:absolute;width:78px;height:120px;border-radius:8px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;color:#041125;font-weight:700;
+  }
+
+  /* history */
+  .history{margin-top:12px;max-height:140px;overflow:auto;padding-right:6px}
+  .historyItem{display:flex;justify-content:space-between;gap:8px;padding:8px;border-radius:8px;background:rgba(255,255,255,0.01);margin-bottom:6px;font-size:13px}
+  .tiny{font-size:12px;color:var(--muted)}
+
+  /* floating accent */
+  .accentGlow{position:absolute;right:-120px;top:-80px;width:300px;height:300px;background:radial-gradient(circle at 30% 30%, rgba(139,92,246,0.12), transparent 30%);filter:blur(34px);pointer-events:none}
+
+  /* accessibility focus */
+  button:focus, input:focus, select:focus { outline:2px solid rgba(139,92,246,0.3); outline-offset:2px; }
+
+  /* small responsive tweaks */
+  @media (max-width:520px){ .sidebar{padding:12px} .controls input, select{padding:10px} }
+</style>
+</head>
+<body>
+  <div class="app" role="application" aria-labelledby="appTitle">
+    <div class="sidebar" aria-label="Bảng điều khiển">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">🔮</div>
+        <div>
+          <div class="appTitle" id="appTitle">Xem Bói Hiện Đại</div>
+          <div class="appSub">Tarot · Tử Vi · Thần Số Học</div>
+        </div>
+      </div>
+
+      <nav class="menu" role="navigation" aria-label="Chọn loại bói">
+        <button id="tabTarot" class="active" aria-pressed="true">Tarot — Rút 3 lá</button>
+        <button id="tabZodiac" aria-pressed="false">Tử Vi — Cung Hoàng Đạo</button>
+        <button id="tabNumber" aria-pressed="false">Thần Số Học — Numerology</button>
+      </nav>
+
+      <div class="controls" aria-hidden="false">
+        <label for="nameInput">Tên (tùy chọn)</label>
+        <input id="nameInput" type="text" placeholder="Ví dụ: Linh">
+
+        <label for="dobInput">Ngày sinh</label>
+        <input id="dobInput" type="date" aria-label="Ngày sinh">
+
+        <label for="zodiacSelect">Hoặc chọn cung (dành cho Tử Vi)</label>
+        <select id="zodiacSelect" aria-label="Chọn cung">
+          <option value="">(Để hệ thống tự tính từ ngày sinh)</option>
+          <option value="Bạch Dương">Bạch Dương</option>
+          <option value="Kim Ngưu">Kim Ngưu</option>
+          <option value="Song Tử">Song Tử</option>
+          <option value="Cự Giải">Cự Giải</option>
+          <option value="Sư Tử">Sư Tử</option>
+          <option value="Xử Nữ">Xử Nữ</option>
+          <option value="Thiên Bình">Thiên Bình</option>
+          <option value="Bọ Cạp">Bọ Cạp</option>
+          <option value="Nhân Mã">Nhân Mã</option>
+          <option value="Ma Kết">Ma Kết</option>
+          <option value="Bảo Bình">Bảo Bình</option>
+          <option value="Song Ngư">Song Ngư</option>
+        </select>
+
+        <button id="goBtn" class="btnPrimary" aria-label="Xem bói">✨ Xem ngay</button>
+        <div class="smallNote">Kết quả mang tính giải trí — hãy đọc để suy ngẫm và vui vẻ.</div>
+      </div>
+
+      <div style="margin-top:12px">
+        <div class="muted">Lịch sử</div>
+        <div class="history" id="history" aria-live="polite"></div>
+      </div>
+    </div>
+
+    <main class="content" aria-label="Kết quả và nội dung">
+      <div class="accentGlow" aria-hidden="true"></div>
+
+      <div class="headerRow">
+        <h2>Kết quả</h2>
+        <div class="actions">
+          <button id="copyBtn" title="Sao chép kết quả">📋 Sao chép</button>
+          <button id="shareBtn" title="Chia sẻ kết quả">🔗 Chia sẻ</button>
+        </div>
+      </div>
+
+      <div class="cardArea" id="overview">
+        <div class="card">
+          <h3>Tarot</h3>
+          <p>Rút 3 lá — Quá khứ · Hiện tại · Tương lai. Nhấp "Xem ngay" để rút.</p>
+        </div>
+        <div class="card">
+          <h3>Tử Vi</h3>
+          <p>Đọc nhanh dựa theo cung hoàng đạo (từ ngày sinh hoặc chọn tay).</p>
+        </div>
+        <div class="card">
+          <h3>Thần Số Học</h3>
+          <p>Chỉ số chủ đạo từ tên và ngày sinh — thấy xu hướng vận mệnh & tính cách.</p>
+        </div>
+      </div>
+
+      <section class="result" id="resultArea" aria-live="polite">
+        <h3 id="resultTitle">Chưa có kết quả</h3>
+        <div class="text" id="resultText">Hãy nhập thông tin và nhấn "Xem ngay" để nhận kết quả.</div>
+
+        <!-- Tarot visuals -->
+        <div id="tarotVisual" style="margin-top:12px;display:none;">
+          <div class="tarotRow" id="tarotRow" aria-hidden="true">
+            <!-- cards injected here -->
+          </div>
+          <div style="text-align:center;margin-top:8px;"><span class="tiny muted">Nhấp vào lá để lật</span></div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+<script>
+/* ---------- Data (simple templates) ---------- */
+const tarotCards = [
+  {id:1,name:'The Fool',desc:'Bắt đầu mới, phiêu lưu và tin tưởng.'},
+  {id:2,name:'The Magician',desc:'Năng lực, ý chí và hành động.'},
+  {id:3,name:'The High Priestess',desc:'Trực giác, bí mật sâu kín.'},
+  {id:4,name:'The Empress',desc:'Sự phong phú, nuôi dưỡng, sáng tạo.'},
+  {id:5,name:'The Emperor',desc:'Quyền lực, trật tự, lãnh đạo.'},
+  {id:6,name:'The Lovers',desc:'Lựa chọn quan trọng, tình cảm.'},
+  {id:7,name:'The Chariot',desc:'Ý chí mạnh mẽ, tiến tới thành công.'},
+  {id:8,name:'Strength',desc:'Sức mạnh nội tâm, sự kiên nhẫn.'},
+  {id:9,name:'Hermit',desc:'Tìm kiếm chân lý, thời gian cho bản thân.'},
+  {id:10,name:'Wheel of Fortune',desc:'Chu kỳ, thay đổi, cơ hội.'},
+  {id:11,name:'Justice',desc:'Cân bằng, quyết định công bằng.'},
+  {id:12,name:'Hanged Man',desc:'Góc nhìn khác, hy sinh tạm thời.'},
+  {id:13,name:'Death',desc:'Kết thúc dẫn tới khởi đầu mới.'},
+  {id:14,name:'Temperance',desc:'Cân bằng, điều hòa, hòa giải.'},
+  {id:15,name:'Devil',desc:'Sự ràng buộc, cám dỗ cần nhận diện.'},
+  {id:16,name:'Tower',desc:'Sự sụp đổ đột ngột, cần tái thiết.'},
+  {id:17,name:'Star',desc:'Hy vọng, cảm hứng, chữa lành.'},
+  {id:18,name:'Moon',desc:'Sự mơ hồ, ẩn khuất và cảm xúc.'},
+  {id:19,name:'Sun',desc:'Vui vẻ, thành tựu, rõ ràng.'},
+  {id:20,name:'Judgement',desc:'Thức tỉnh, đánh giá lại quá khứ.'},
+  {id:21,name:'World',desc:'Hoàn thiện, đạt mục tiêu.'}
+];
+
+const zodiacTemplates = {
+  'Bạch Dương': 'Năng lượng mạnh mẽ — thời điểm để hành động. Hãy dùng quyết đoán nhưng giữ mềm dẻo trong các mối quan hệ.',
+  'Kim Ngưu': 'Ổn định, tập trung vào giá trị cá nhân. Tài chính và an toàn là chủ đề chính.',
+  'Song Tử': 'Giao tiếp lên ngôi — thời điểm để kết nối, trao đổi và học hỏi.',
+  'Cự Giải': 'Cảm xúc sâu sắc — chăm sóc gia đình và bản thân là ưu tiên.',
+  'Sư Tử': 'Tỏa sáng — tự tin, sáng tạo, dễ thu hút sự chú ý và cơ hội.',
+  'Xử Nữ': 'Chi tiết & tổ chức — sắp xếp lại kế hoạch sẽ cho hiệu quả.',
+  'Thiên Bình': 'Cân bằng trong quan hệ — quyết định khôn ngoan mang lại hài hòa.',
+  'Bọ Cạp': 'Sức mạnh nội tâm — đi sâu vào bản chất, sự thay đổi có thể diễn ra.',
+  'Nhân Mã': 'Mở rộng, du lịch hoặc học tập — cơ hội phát triển tầm nhìn.',
+  'Ma Kết': 'Kỷ luật & nỗ lực — các bước nhỏ đều dẫn đến thành tựu lâu dài.',
+  'Bảo Bình': 'Ý tưởng mới, cộng đồng hỗ trợ — phá vỡ thói quen để sáng tạo.',
+  'Song Ngư': 'Trực giác mạnh, nghệ thuật & linh cảm — lắng nghe cảm xúc.'
+};
+
+/* ---------- Utils ---------- */
+function randInt(max){ return Math.floor(Math.random()*max); }
+function sample(arr){ return arr[randInt(arr.length)]; }
+function formatDate(d){ return new Date(d).toLocaleString(); }
+
+/* ---------- State ---------- */
+let currentTab = 'tarot';
+const historyKey = 'xb_history_v1';
+
+/* ---------- DOM ---------- */
+const tabTarot = document.getElementById('tabTarot');
+const tabZodiac = document.getElementById('tabZodiac');
+const tabNumber = document.getElementById('tabNumber');
+const goBtn = document.getElementById('goBtn');
+const resultTitle = document.getElementById('resultTitle');
+const resultText = document.getElementById('resultText');
+const tarotVisual = document.getElementById('tarotVisual');
+const tarotRow = document.getElementById('tarotRow');
+const historyEl = document.getElementById('history');
+const nameInput = document.getElementById('nameInput');
+const dobInput = document.getElementById('dobInput');
+const zodiacSelect = document.getElementById('zodiacSelect');
+const copyBtn = document.getElementById('copyBtn');
+const shareBtn = document.getElementById('shareBtn');
+
+/* ---------- Tab handling ---------- */
+function setActiveTab(tab){
+  currentTab = tab;
+  [tabTarot, tabZodiac, tabNumber].forEach(b=> b.classList.remove('active'));
+  tabTarot.setAttribute('aria-pressed','false'); tabZodiac.setAttribute('aria-pressed','false'); tabNumber.setAttribute('aria-pressed','false');
+  if(tab==='tarot'){ tabTarot.classList.add('active'); tabTarot.setAttribute('aria-pressed','true'); }
+  if(tab==='zodiac'){ tabZodiac.classList.add('active'); tabZodiac.setAttribute('aria-pressed','true'); }
+  if(tab==='number'){ tabNumber.classList.add('active'); tabNumber.setAttribute('aria-pressed','true'); }
+  // hide tarot visuals unless tarot tab
+  tarotVisual.style.display = (tab==='tarot') ? 'block' : 'none';
+}
+tabTarot.addEventListener('click', ()=> setActiveTab('tarot'));
+tabZodiac.addEventListener('click', ()=> setActiveTab('zodiac'));
+tabNumber.addEventListener('click', ()=> setActiveTab('number'));
+setActiveTab('tarot');
+
+/* ---------- Tarot: draw n unique cards ---------- */
+function drawTarot(n=3){
+  const deck = [...tarotCards];
+  const draw = [];
+  for(let i=0;i<n;i++){
+    const idx = randInt(deck.length);
+    const card = deck.splice(idx,1)[0];
+    // random orientation
+    card.rev = Math.random() < 0.28; // ~28% reversed meaning
+    draw.push(card);
+  }
+  return draw;
+}
+
+/* ---------- Zodiac from DOB ---------- */
+function zodiacFromDob(dob){
+  if(!dob) return '';
+  const d = new Date(dob);
+  const m = d.getMonth()+1; const day = d.getDate();
+  // ranges
+  if((m===3 && day>=21) || (m===4 && day<=19)) return 'Bạch Dương';
+  if((m===4 && day>=20) || (m===5 && day<=20)) return 'Kim Ngưu';
+  if((m===5 && day>=21) || (m===6 && day<=21)) return 'Song Tử';
+  if((m===6 && day>=22) || (m===7 && day<=22)) return 'Cự Giải';
+  if((m===7 && day>=23) || (m===8 && day<=22)) return 'Sư Tử';
+  if((m===8 && day>=23) || (m===9 && day<=22)) return 'Xử Nữ';
+  if((m===9 && day>=23) || (m===10 && day<=23)) return 'Thiên Bình';
+  if((m===10 && day>=24) || (m===11 && day<=21)) return 'Bọ Cạp';
+  if((m===11 && day>=22) || (m===12 && day<=21)) return 'Nhân Mã';
+  if((m===12 && day>=22) || (m===1 && day<=19)) return 'Ma Kết';
+  if((m===1 && day>=20) || (m===2 && day<=18)) return 'Bảo Bình';
+  if((m===2 && day>=19) || (m===3 && day<=20)) return 'Song Ngư';
+  return '';
+}
+
+/* ---------- Numerology: life path from dob ---------- */
+function lifePathNumber(dob){
+  if(!dob) return null;
+  const d = new Date(dob);
+  const s = '' + d.getFullYear() + (''+(d.getMonth()+1)).padStart(2,'0') + (''+d.getDate()).padStart(2,'0');
+  // sum digits until 1-9
+  let sum = s.split('').reduce((a,c)=>a+Number(c),0);
+  while(sum > 9 && sum !== 11 && sum !== 22){
+    sum = (''+sum).split('').reduce((a,c)=>a+Number(c),0);
+  }
+  return sum;
+}
+
+/* ---------- Generate result ---------- */
+function generateResult(){
+  const name = nameInput.value.trim();
+  const dob = dobInput.value || null;
+  const chosenZodiac = zodiacSelect.value || '';
+  let result = {title:'', text:'', meta:''};
+
+  if(currentTab === 'tarot'){
+    // draw 3 cards
+    const cards = drawTarot(3);
+    // visual
+    tarotRow.innerHTML = '';
+    cards.forEach((c,i)=>{
+      const wrapper = document.createElement('div');
+      wrapper.style.position='relative';
+      wrapper.style.perspective='800px';
+      const cardEl = document.createElement('div');
+      cardEl.className='cardBack';
+      cardEl.setAttribute('tabindex','0');
+      cardEl.dataset.idx = i;
+      // front face
+      const face = document.createElement('div');
+      face.className='cardFace';
+      face.style.transform='rotateY(180deg)'; face.style.background='linear-gradient(180deg,#fff8ef,#fff1e6)'; face.style.border='1px solid rgba(6,10,20,0.06)'; face.style.color='#2b1b15'; face.style.flexDirection='column'; face.style.justifyContent='center';
+      face.innerHTML = `<div style="font-size:13px;font-weight:800">${c.name}${c.rev? ' (ngược)':''}</div><div style="font-size:11px;color:#5b4b44;margin-top:8px">${c.desc}</div>`;
+      // back face
+      cardEl.innerHTML = '<div style="font-size:10px;opacity:0.9">🔮</div>';
+      // assemble
+      wrapper.appendChild(cardEl);
+      wrapper.appendChild(face);
+      // position
+      cardEl.style.transform='rotateY(0deg)';
+      face.style.backfaceVisibility='hidden';
+      face.style.position='absolute'; face.style.inset='0'; face.style.borderRadius='8px';
+      wrapper.style.width='78px';
+      wrapper.style.height='120px';
+      // click to flip
+      let flipped=false;
+      function flip(){
+        flipped = !flipped;
+        if(flipped){
+          cardEl.style.transform='rotateY(180deg)';
+          face.style.transform='rotateY(0deg)';
+        } else {
+          cardEl.style.transform='rotateY(0deg)';
+          face.style.transform='rotateY(180deg)';
+        }
+      }
+      cardEl.addEventListener('click', flip);
+      face.addEventListener('click', flip);
+      cardEl.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' ') flip(); });
+      tarotRow.appendChild(wrapper);
+    });
+    tarotVisual.style.display = 'block';
+
+    // text
+    const past = sample(tarotCards).desc;
+    const present = sample(tarotCards).desc;
+    const future = sample(tarotCards).desc;
+    result.title = 'Tarot — 3 lá';
+    result.text = `${name? name + ', ':'Bạn,'} năng lượng hiện tại cho thấy: ${present} Trước đó: ${past} Và sắp tới: ${future}`;
+    result.meta = `Rút lúc ${formatDate(new Date())}`;
+  }
+  else if(currentTab === 'zodiac'){
+    // get zodiac
+    let zodiac = chosenZodiac || zodiacFromDob(dob);
+    if(!zodiac) zodiac = sample(Object.keys(zodiacTemplates));
+    result.title = `Tử vi — ${zodiac}`;
+    const template = zodiacTemplates[zodiac] || 'Năng lượng chung: cần chú ý cân bằng cá nhân và cơ hội.';
+    result.text = `${name? name + ', ':''}${template} (${dob? 'Sinh ngày ' + (new Date(dob)).toLocaleDateString() : 'Ngày sinh không cung cấp'})`;
+    result.meta = `Phân tích nhanh — ${formatDate(new Date())}`;
+    tarotVisual.style.display = 'none';
+  }
+  else if(currentTab === 'number'){
+    const lp = lifePathNumber(dob);
+    result.title = 'Thần Số Học';
+    if(lp){
+      const descMap = {
+        1: 'Lãnh đạo, độc lập, sáng tạo.',
+        2: 'Hợp tác, hài hòa, nhạy cảm.',
+        3: 'Sáng tạo, giao tiếp, vui tươi.',
+        4: 'Làm việc chăm chỉ, thực tế, bền bỉ.',
+        5: 'Tự do, phiêu lưu, thay đổi.',
+        6: 'Trách nhiệm, gia đình, yêu thương.',
+        7: 'Suy ngẫm, nghiên cứu, nội tâm.',
+        8: 'Tham vọng, quyền lực, thành công.',
+        9: 'Vĩ đại, nhân đạo, tầm nhìn.',
+        11:'Trực giác, cảm hứng (số chủ).',
+        22:'Xây dựng, tầm ảnh hưởng (số lớn).'
+      };
+      result.text = `${name? name + ', ' : ''}Chỉ số chủ đạo của bạn là ${lp}: ${descMap[lp] || 'Sức mạnh nội tâm đặc biệt.'}`;
+    } else {
+      result.text = 'Vui lòng chọn ngày sinh để tính Thần Số Học.';
+    }
+    result.meta = `Tính toán lúc ${formatDate(new Date())}`;
+    tarotVisual.style.display = 'none';
+  }
+
+  // render
+  resultTitle.textContent = result.title;
+  resultText.textContent = result.text + ' — ' + result.meta;
+
+  // save history
+  saveHistory({tab:currentTab,name:name || '',dob:dob || '',title:result.title,text:result.text,time:new Date().toISOString()});
+}
+
+/* ---------- History storage ---------- */
+function loadHistory(){
+  try{
+    const raw = localStorage.getItem(historyKey);
+    if(!raw) return [];
+    return JSON.parse(raw);
+  }catch(e){ return []; }
+}
+function saveHistoryItem(item){
+  const arr = loadHistory();
+  arr.unshift(item);
+  if(arr.length>30) arr.pop();
+  localStorage.setItem(historyKey, JSON.stringify(arr));
+  renderHistory();
+}
+function saveHistory(it){ saveHistoryItem(it); }
+function renderHistory(){
+  const arr = loadHistory();
+  historyEl.innerHTML = arr.map(i=> `<div class="historyItem"><div><strong>${i.title}</strong><div class="tiny">${i.name||'Khách'} • ${ (new Date(i.time)).toLocaleString() }</div></div><div style="text-align:right"><button onclick='replay("${i.time}")'>Xem</button></div></div>`).join('');
+}
+function replay(time){
+  const arr = loadHistory();
+  const it = arr.find(a=>a.time===time);
+  if(!it) return;
+  resultTitle.textContent = it.title;
+  resultText.textContent = it.text + ' — Lưu: ' + (new Date(it.time)).toLocaleString();
+}
+
+/* ---------- helper: share & copy ---------- */
+copyBtn.addEventListener('click', ()=> {
+  const txt = resultTitle.textContent + '\n' + resultText.textContent;
+  navigator.clipboard?.writeText(txt).then(()=> alert('Đã sao chép kết quả')).catch(()=> alert('Không thể sao chép'));
+});
+shareBtn.addEventListener('click', async ()=>{
+  const txt = resultTitle.textContent + '\n' + resultText.textContent;
+  if(navigator.share){
+    try{ await navigator.share({title:resultTitle.textContent,text:resultText.textContent}); }
+    catch(e){ alert('Chia sẻ bị huỷ'); }
+  } else {
+    alert('Trình duyệt không hỗ trợ Web Share — bạn có thể sao chép kết quả.');
+  }
+});
+
+/* ---------- wire go button ---------- */
+goBtn.addEventListener('click', ()=>{
+  generateResult();
+});
+
+/* ---------- accessibility: keyboard shortcuts ---------- */
+window.addEventListener('keydown',(e)=> {
+  if(e.key==='1') setActiveTab('tarot');
+  if(e.key==='2') setActiveTab('zodiac');
+  if(e.key==='3') setActiveTab('number');
+  if(e.key==='Enter' && (e.ctrlKey||e.metaKey)) generateResult();
+});
+
+/* ---------- init ---------- */
+renderHistory();
+
+</script>
+</body>
+</html>

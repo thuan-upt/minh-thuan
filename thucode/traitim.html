@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🎄 Merry Christmas & Happy New Year 🎆</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    overflow: hidden;
+    background: radial-gradient(circle at top, #00111a, #000);
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+    text-align: center;
+  }
+
+  /* ❄️ Tuyết rơi */
+  .snowflake {
+    position: fixed;
+    top: -10px;
+    color: #fff;
+    font-size: 1em;
+    pointer-events: none;
+    animation: fall linear infinite;
+    z-index: 1;
+  }
+  @keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* 🎅 Ông già Noel */
+  .santa {
+    position: fixed;
+    top: 15%;
+    left: -200px;
+    font-size: 60px;
+    z-index: 10;
+    animation: santaFly 12s linear infinite;
+  }
+  @keyframes santaFly {
+    0% { left: -200px; transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(-10deg); }
+    100% { left: 110%; transform: scale(1) rotate(0deg); }
+  }
+
+  /* 🎄 Cây thông Noel */
+  .tree {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    transform: translateX(-50%);
+    text-align: center;
+    line-height: 1;
+  }
+  .tree .star {
+    color: gold;
+    font-size: 4em;
+    text-shadow: 0 0 15px gold, 0 0 30px yellow;
+    animation: starBlink 1.2s infinite alternate;
+  }
+  .tree .layer {
+    display: block;
+    font-size: 3em;
+    animation: colorShift 3s infinite alternate;
+  }
+  @keyframes colorShift {
+    0% { color: #0f0; text-shadow: 0 0 15px lime; }
+    50% { color: #ff0; text-shadow: 0 0 20px yellow; }
+    100% { color: #0ff; text-shadow: 0 0 15px cyan; }
+  }
+  @keyframes starBlink {
+    0% { text-shadow: 0 0 10px gold, 0 0 20px gold; }
+    100% { text-shadow: 0 0 40px orange, 0 0 60px yellow; }
+  }
+
+  /* 💌 Merry Christmas */
+  .merry {
+    margin-top: 30px;
+    font-size: 2.2em;
+    font-weight: bold;
+    text-shadow: 0 0 20px red, 0 0 40px gold;
+    animation: lightPulse 2s infinite;
+  }
+  @keyframes lightPulse {
+    0%,100% { color: red; text-shadow: 0 0 20px gold, 0 0 40px yellow; }
+    50% { color: yellow; text-shadow: 0 0 40px red, 0 0 80px orange; }
+  }
+
+  /* 🎁 Quà rơi */
+  .gift {
+    position: fixed;
+    top: -50px;
+    font-size: 28px;
+    animation: dropGift linear forwards;
+  }
+  @keyframes dropGift {
+    0% { transform: translateY(0); opacity: 1; }
+    100% { transform: translateY(100vh); opacity: 0; }
+  }
+
+  /* ✨ Ánh sáng nền lung linh */
+  .light {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    animation: sparkle 2s infinite;
+  }
+  @keyframes sparkle {
+    0%,100% { opacity: 0.2; transform: scale(0.8); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* ⏰ Countdown */
+  #countdown {
+    margin-top: 10px;
+    font-size: 1.4em;
+    color: #ffecb3;
+    text-shadow: 0 0 15px #fff;
+  }
+
+  /* 🔘 Nút nhạc + pháo hoa */
+  #controls {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+  }
+
+  button {
+    background: rgba(255,255,255,0.2);
+    border: 2px solid white;
+    color: white;
+    border-radius: 30px;
+    padding: 10px 18px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: 0.3s;
+  }
+  button:hover { background: rgba(255,255,255,0.4); }
+
+  /* 🎆 Pháo hoa */
+  .firework {
+    position: fixed;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: explode 1.2s ease-out forwards;
+  }
+  @keyframes explode {
+    0% { opacity: 1; transform: scale(0.5); }
+    100% { opacity: 0; transform: scale(4); }
+  }
+
+  @media (max-width: 768px) {
+    .merry { font-size: 1.6em; }
+    .tree .layer { font-size: 2.2em; }
+    .tree .star { font-size: 3em; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="merry" id="merryText">🎄 Merry Christmas 🎅</div>
+  <div id="countdown"></div><br><br><br><br>
+  <div class="santa">Giáng Sinh An Lành</div>
+
+  <div class="tree">
+    <span class="star">★</span>
+    <span class="layer">▲</span>
+    <span class="layer">▲▲</span>
+    <span class="layer">▲▲▲</span>
+    <span class="layer">▲▲▲▲</span>
+    <span class="layer">▲▲▲▲▲</span>
+    <span class="layer">▲▲▲▲▲▲</span>
+    <span style="color:brown; font-size:2em;">▮</span>
+  </div>
+
+  <div id="controls">
+    <button id="musicBtn">🎵 Nhạc</button>
+    <button id="fireworkBtn">🎆 Chúc Mừng Năm Mới</button>
+  </div>
+
+  <audio id="bgMusic" loop>
+    <source src="mp3/nhac.mp3.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+  // ❄️ Tạo tuyết rơi
+  function createSnow() {
+    const snow = document.createElement("div");
+    snow.classList.add("snowflake");
+    snow.textContent = "❆";
+    snow.style.left = Math.random() * 100 + "vw";
+    snow.style.fontSize = Math.random() * 10 + 10 + "px";
+    snow.style.animationDuration = Math.random() * 3 + 5 + "s";
+    document.body.appendChild(snow);
+    setTimeout(() => snow.remove(), 8000);
+  }
+  setInterval(createSnow, 120);
+
+  // 🎁 Quà rơi
+  function dropGift() {
+    const gift = document.createElement("div");
+    gift.classList.add("gift");
+    const gifts = ["🎁", "🧦", "🍫", "🎀", "🧸"];
+    gift.textContent = gifts[Math.floor(Math.random() * gifts.length)];
+    gift.style.left = Math.random() * 100 + "vw";
+    gift.style.animationDuration = Math.random() * 3 + 4 + "s";
+    document.body.appendChild(gift);
+    setTimeout(() => gift.remove(), 7000);
+  }
+  setInterval(dropGift, 1500);
+
+  // ✨ Ánh sáng nền lung linh
+  for (let i = 0; i < 60; i++) {
+    const light = document.createElement("div");
+    light.classList.add("light");
+    light.style.left = Math.random() * 100 + "vw";
+    light.style.top = Math.random() * 100 + "vh";
+    light.style.background = `hsl(${Math.random()*360}, 80%, 70%)`;
+    light.style.animationDuration = (Math.random()*2 + 1) + "s";
+    document.body.appendChild(light);
+  }
+
+  // 🎵 Nhạc và ánh sáng chữ Merry
+  const musicBtn = document.getElementById("musicBtn");
+  const bgMusic = document.getElementById("bgMusic");
+  const merryText = document.getElementById("merryText");
+  let playing = false;
+
+  musicBtn.addEventListener("click", () => {
+    if (!playing) {
+      bgMusic.play();
+      playing = true;
+      musicBtn.textContent = "🔇 Tắt Nhạc";
+      merryText.style.animation = "lightPulse 0.6s infinite";
+    } else {
+      bgMusic.pause();
+      playing = false;
+      musicBtn.textContent = "🎵 Nhạc";
+      merryText.style.animation = "lightPulse 2s infinite";
+    }
+  });
+
+  // ⏰ Countdown đến Giáng Sinh
+  function updateCountdown() {
+    const now = new Date();
+    const year = now.getFullYear();
+    const christmas = new Date(`December 25, ${year} 00:00:00`);
+    const diff = christmas - now;
+
+    if (diff <= 0) {
+      document.getElementById("countdown").textContent = "🎅 Giáng Sinh đã đến! Ho ho ho! 🎁";
+      return;
+    }
+
+    const days = Math.floor(diff / (1000*60*60*24));
+    const hours = Math.floor((diff / (1000*60*60)) % 24);
+    const minutes = Math.floor((diff / (1000*60)) % 60);
+    const seconds = Math.floor((diff / 1000) % 60);
+
+    document.getElementById("countdown").textContent =
+      `⏰ Còn ${days} ngày ${hours} giờ ${minutes} phút ${seconds} giây đến Giáng Sinh 🎄`;
+  }
+  setInterval(updateCountdown, 1000);
+
+  // 🎆 Pháo hoa mừng năm mới
+  const fireworkBtn = document.getElementById("fireworkBtn");
+  fireworkBtn.addEventListener("click", () => {
+    for (let i = 0; i < 30; i++) {
+      setTimeout(() => createFirework(), i * 200);
+    }
+  });
+
+  function createFirework() {
+    const firework = document.createElement("div");
+    firework.classList.add("firework");
+    firework.style.left = Math.random() * 100 + "vw";
+    firework.style.top = Math.random() * 50 + "vh";
+    firework.style.width = firework.style.height = Math.random() * 8 + 8 + "px";
+    firework.style.background = `hsl(${Math.random()*360}, 100%, 60%)`;
+    document.body.appendChild(firework);
+    setTimeout(() => firework.remove(), 1200);
+  }
+</script>
+</body>
+</html>
