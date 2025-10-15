@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dành tặng chị ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/u8xG3Dr.png">
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Đang tải yêu thương...</p>
+    </div>
+
+    <div class="container">
+        <div id="initial-screen" class="screen active">
+            <div class="card">
+                <img src="https://bom.so/uU3OFl" alt="Cute bunny" class="bunny-img">
+                <h1 class="card-title">Tặng Chị Nè</h1>
+                <p class="click-text">Chạm vào đây đi</p>
+            </div>
+        </div>
+
+        <div id="flower-scene" class="screen">
+            <h1 class="greeting-text">Chúc mừng ngày phụ nữ Việt Nam 20-10</h1><br><br><br><br>
+            <img src="https://bom.so/uU3OFl" alt="Bouquet of flowers" class="flower-bouquet">
+            <div id="message-modal" class="modal">
+                <div class="modal-content">
+                    <h2 class="modal-title">Gửi Chị Hai 💌</h2>
+                    <p id="typed-text-1"></p>
+                    <p id="typed-text-2"></p>
+                    <button id="close-modal-btn">Chạm vào đóa hoa nhé</button>
+                </div>
+            </div>
+            <div id="sequential-messages"></div>
+        </div>
+
+        <div id="heart-scene" class="screen">
+            <div class="love-text">Chị Hai 💖</div>
+            <div class="scene-3d">
+                <div class="world"></div>
+            </div>
+            <div class="foreground-slider">
+                <img src="img/anh1.jpg" alt="special image">
+            </div>
+        </div>
+    </div>
+
+    <audio id="background-music" loop></audio>
+    <script src="script.js"></script>
+</body>
+</html>
