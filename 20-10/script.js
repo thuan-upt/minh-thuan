@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Thay đổi nội dung, link ảnh, link nhạc ở đây
     const config = {
         // Nhạc nền
-        musicUrl: "https://vgmdownloads.com/soundtracks/genshin-impact-promotional-videos-ost/eorxlelyud/1.03.%20A%20Day%20in%20Mondstadt.mp3",
+        musicUrl: "mp3/mychi.mp3",
 
         // Lời nhắn trong popup
         modalMessage: {
