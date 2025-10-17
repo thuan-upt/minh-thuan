@@ -1,0 +1,340 @@
+/* --- Cài đặt chung & Biến màu --- */
+:root {
+    --primary-color: #e85a70;
+    --secondary-color: #d1425d;
+    --text-color: #333;
+    --bg-light: #fdeff0;
+    --bg-dark: #fddbde;
+    --white: #ffffff;
+    --font-heading: 'Pacifico', cursive;
+    --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    /* Thiết lập cỡ chữ gốc để dùng đơn vị rem, tốt cho responsive */
+    font-size: 16px;
+}
+
+body {
+    font-family: var(--font-body);
+    height: 100vh;
+    /* Dùng dvh để tương thích tốt hơn trên mobile safari */
+    height: 100dvh;
+    overflow: hidden;
+    background: linear-gradient(135deg, var(--bg-light), var(--bg-dark));
+    animation: gradient-animation 15s ease infinite;
+    background-size: 200% 200%;
+    color: var(--text-color);
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+    padding: 1rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.8s ease-in-out;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* --- Màn hình chờ --- */
+#loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--white);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid var(--bg-dark);
+    border-top: 5px solid var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 20px;
+}
+
+#loader p {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+/* --- Màn hình 1: Ban đầu --- */
+#initial-screen .card {
+    background: var(--white);
+    padding: clamp(2rem, 5vw, 2.5rem);
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 90%;
+    max-width: 450px;
+}
+
+#initial-screen .card:hover {
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+}
+
+.bunny-img {
+    width: clamp(120px, 30vw, 150px);
+    margin-bottom: 1rem;
+}
+
+.card-title {
+    font-family: var(--font-heading);
+    font-size: clamp(2.5rem, 8vw, 3rem);
+    color: var(--primary-color);
+}
+
+.click-text {
+    margin-top: 1rem;
+    color: #999;
+    font-weight: 500;
+    animation: breathe 2s ease-in-out infinite;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+/* --- Màn hình 2: Bó hoa --- */
+.greeting-text {
+    position: absolute;
+    top: 15%;
+    font-family: var(--font-heading);
+    font-size: clamp(1.8rem, 6vw, 2.8rem);
+    color: var(--secondary-color);
+    opacity: 0;
+    animation: fadeInDown 2s forwards 0.5s;
+    width: 90%;
+}
+
+.flower-bouquet {
+    width: clamp(280px, 80vw, 400px);
+    max-width: 90%;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: growIn 2s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards 1.5s;
+    cursor: pointer;
+}
+
+/* Modal Lời nhắn */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s, visibility 0.5s;
+    z-index: 100;
+}
+
+.modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-content {
+    background: var(--white);
+    padding: clamp(1.5rem, 5vw, 2rem);
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    text-align: center;
+    transform: scale(0.8);
+    transition: transform 0.5s;
+}
+
+.modal.visible .modal-content {
+    transform: scale(1);
+}
+
+.modal-title {
+    font-family: var(--font-heading);
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+    font-size: clamp(1.8rem, 6vw, 2.2rem);
+}
+
+.modal-content p {
+    color: var(--text-color);
+    line-height: 1.7;
+    min-height: 25px;
+    margin-bottom: 10px;
+    font-size: clamp(0.9rem, 2.5vw, 1rem);
+}
+
+#close-modal-btn {
+    margin-top: 1.5rem;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    background: var(--primary-color);
+    color: var(--white);
+    border-radius: 50px;
+    cursor: pointer;
+    font-family: var(--font-body);
+    font-weight: 700;
+    transition: background 0.3s, transform 0.3s;
+}
+
+#close-modal-btn:hover {
+    background: var(--secondary-color);
+    transform: scale(1.05);
+}
+
+/* Lời chúc nối tiếp */
+#sequential-messages {
+    position: absolute;
+    top: 30%;
+    width: 90%;
+    max-width: 600px;
+    color: var(--secondary-color);
+    font-size: clamp(1.2rem, 4vw, 1.5rem);
+    font-weight: bold;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1rem 1.5rem;
+    border-radius: 50px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+
+/* --- Màn hình 3: Trái tim 3D --- */
+#heart-scene {
+    background: #000;
+}
+
+.love-text {
+    position: absolute;
+    top: 10%;
+    font-family: var(--font-heading);
+    color: #f8b0c0;
+    font-size: clamp(2.5rem, 8vw, 3.5rem);
+    z-index: 10;
+}
+
+.scene-3d {
+    perspective: 1000px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.world {
+    transform-style: preserve-3d;
+    animation: rotateWorld 45s linear infinite;
+}
+
+.image-card {
+    position: absolute;
+    width: clamp(80px, 18vw, 120px);
+    height: clamp(80px, 18vw, 120px);
+    background: var(--white);
+    border-radius: 10px;
+    overflow: hidden;
+    backface-visibility: hidden;
+    border: 2px solid var(--white);
+}
+
+.image-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.foreground-slider {
+    position: absolute;
+    z-index: 5;
+    opacity: 0;
+    transform: scale(0.5);
+    animation: popInAndOut 5s ease-in-out infinite;
+}
+.foreground-slider img {
+    width: clamp(200px, 50vw, 280px);
+    border: 5px solid var(--white);
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+
+/* --- Keyframes Animations --- */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes gradient-animation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes growIn {
+    to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rotateWorld {
+    from { transform: rotateY(0deg) rotateX(10deg); }
+    to { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+@keyframes popInAndOut {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    10%, 90% { opacity: 1; transform: scale(1); }
+}
+
+/* --- Media query cho thiết bị có màn hình rất nhỏ --- */
+@media (max-width: 360px) {
+    .greeting-text { top: 12%; }
+    #sequential-messages { top: 25%; }
+}
+
+/* --- Media query cho màn hình ngang --- */
+@media (max-height: 500px) and (orientation: landscape) {
+    .greeting-text { top: 5%; font-size: 1.5rem; }
+    .flower-bouquet { width: 200px; }
+    #sequential-messages { top: 10%; font-size: 1rem; }
+    .love-text { top: 5%; }
+}
