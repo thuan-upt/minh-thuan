@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tri ân Thầy Cô 20/11 ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="https://i.imgur.com/u8xG3Dr.png">
+</head>
+<body>
+    <div id="loader">
+        <div class="spinner"></div>
+        <p>Đang tải lời chúc...</p>
+    </div>
+
+    <div class="container">
+        <div id="initial-screen" class="screen active">
+            <div class="card" id="welcomeCard">
+                <img src="https://d5.violet.vn/uploads/extras/document/0/835/119/BOOK1.gif.jpg" alt="Icon sách vở" class="bunny-img"> <h1 class="card-title">Tri ân 20/11</h1>
+                <p>Xin nhập tên Giảng viên/Thầy/Cô:</p>
+                <div class="input-group">
+                    <input type="text" id="teacherNameInput" placeholder="Ví dụ: Thầy Nguyễn Văn A" autocomplete="off">
+                    <button id="submitNameBtn">Gửi lời chúc 💖</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="flower-scene" class="screen">
+            <h1 class="greeting-text">Chúc mừng ngày Nhà giáo Việt Nam 20-11</h1>
+            <img src="https://png.pngtree.com/png-clipart/20241206/original/pngtree-sunflower-bouquet-png-image_17631477.png" alt="Bó hoa tặng thầy cô" class="flower-bouquet"> <div id="message-modal" class="modal">
+                <div class="modal-content">
+                    <h2 class="modal-title" id="modal-title-dynamic">Gửi Thầy/Cô 💌</h2>
+                    <p id="typed-text-1"></p>
+                    <p id="typed-text-2"></p>
+                    <button id="close-modal-btn">Xem lời chúc nhé</button>
+                </div>
+            </div>
+            <div id="sequential-messages"></div>
+        </div>
+
+        <div id="heart-scene" class="screen">
+            <div class="love-text" id="love-text-dynamic">Thầy/Cô 💖</div>
+            <div class="scene-3d">
+                <div class="world"></div>
+            </div>
+            <div class="foreground-slider">
+                <img src="img/default.png" alt="Ảnh kỷ niệm">
+            </div>
+        </div>
+    </div>
+
+    <audio id="background-music" loop></audio>
+    <script src="script.js"></script> </body>
+</html>
