@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minh Thuận Lì Xì Tết 2026</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    <style>
+        :root { --gold: #ffd700; --red: #b30000; --dark-red: #800000; --white: #ffffff; --glass: rgba(255, 255, 255, 0.95); }
+        body { background: radial-gradient(circle, #b30000 0%, #600000 100%); color: var(--gold); font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; text-align: center; padding: 20px; margin: 0; user-select: none; }
+        #admin-panel { display: none; background: var(--glass); color: #2d3436; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 900px; max-height: 90vh; overflow-y: auto; z-index: 2000; border-radius: 24px; padding: 30px; box-shadow: 0 25px 50px rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.3); }
+        .admin-header { border-bottom: 2px solid #f1f2f6; padding-bottom: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+        .admin-header h2 { margin: 0; color: var(--red); font-size: 20px; text-transform: uppercase; }
+        .add-player-box { background: #f8f9fa; padding: 15px; border-radius: 16px; display: flex; gap: 10px; margin-bottom: 20px; align-items: center; }
+        .add-player-box input { flex: 1; padding: 10px; border: 2px solid #dfe6e9; border-radius: 10px; outline: none; }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 15px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; border-radius: 10px; cursor: pointer; font-weight: bold; background: #eee; }
+        .tab-btn.active { background: var(--red); color: white; }
+        .admin-table { width: 100%; border-collapse: separate; border-spacing: 0 5px; }
+        .admin-table th { padding: 10px; color: #636e72; font-size: 12px; text-transform: uppercase; }
+        .admin-table td { padding: 10px; background: #fff; border-top: 1px solid #f1f2f6; border-bottom: 1px solid #f1f2f6; text-align: center; }
+        .rate-input { width: 60px; padding: 5px; text-align: center; border: 1px solid #ccc; border-radius: 5px; }
+        .btn-action { border: none; padding: 8px 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 13px; }
+        .btn-add-main { background: #28a745; color: white; }
+        .btn-plus-small { background: #e3f2fd; color: #1976d2; }
+        .btn-del-small { background: #ffebee; color: #d32f2f; }
+        .btn-close-admin { width: 100%; margin-top: 15px; padding: 12px; background: #2d3436; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .wheel-container { position: relative; width: 340px; height: 340px; margin: 40px auto; }
+        .wheel-box { width: 100%; height: 100%; border-radius: 50%; border: 10px solid var(--gold); box-shadow: 0 0 30px rgba(0,0,0,0.5); transition: transform 20s cubic-bezier(0.1, 0, 0.1, 1); background: white; overflow: hidden; }
+        .pointer { position: absolute; top: -20px; left: 50%; transform: translateX(-50%); z-index: 100; width: 0; height: 0; border-left: 15px solid transparent; border-right: 15px solid transparent; border-top: 40px solid #ffcc00; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5)); }
+        .box { background: rgba(0, 0, 0, 0.3); padding: 20px; border-radius: 15px; border: 1px solid var(--gold); max-width: 600px; margin: 20px auto; }
+        input[type="text"] { padding: 12px; border-radius: 8px; border: 1px solid var(--gold); width: 70%; margin-bottom: 10px; font-size: 16px; }
+        button.main-btn { padding: 15px 40px; font-size: 20px; background: var(--gold); color: var(--dark-red); border: none; border-radius: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; box-shadow: 0 5px 0 #b8860b; }
+        .logout-btn { background: none; border: 1px solid var(--gold); color: var(--gold); padding: 5px 15px; border-radius: 20px; cursor: pointer; margin-top: 10px; font-size: 13px; opacity: 0.8; }
+        .falling-envelope { position: fixed; top: -50px; z-index: -1; animation: fall linear forwards; font-size: 24px; }
+        @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <audio id="spinSound" src="mp3/Download.mp3" preload="auto"></audio>
+    <h1>🧧 TẾT ẤT TỴ 2026 🧧</h1>
+    <div id="login-screen" class="box">
+        <h3>NHẬP TÊN NHẬN LÌ XÌ</h3>
+        <input type="text" id="username" placeholder="Nhập tên của bạn...">
+        <br>
+        <button class="main-btn" onclick="handleLogin()">VÀO CHƠI</button>
+        <p style="margin-top:20px"><a href="#" onclick="openAdmin()" style="color:var(--gold); font-size:12px; text-decoration:none; opacity: 0.7;">⚙️ Quản lý hệ thống</a></p>
+    </div>
+    <div id="game-screen" style="display:none;">
+        <div class="box">
+            <h2 style="margin:0">Chào, <span id="user-name-display"></span></h2>
+            <p>Tiền của bạn: <strong id="user-balance" style="font-size:1.5em; color:#fff">0</strong> VNĐ</p>
+            <p style="margin-bottom: 5px;">Số lượt quay còn lại: <strong id="user-spins-left" style="font-size:1.5em; color:#0f0">0</strong></p>
+            <button class="logout-btn" onclick="handleLogout()">Đăng xuất tài khoản</button>
+        </div>
+        <div class="wheel-container">
+            <div class="pointer"></div>
+            <div class="wheel-box" id="wheel">
+                <canvas id="canvas" width="340" height="340"></canvas>
+            </div>
+        </div>
+        <button id="spin-btn" class="main-btn" onclick="startSpin()">QUAY NGAY</button>
+        <div class="box" style="margin-top:30px">
+            <h4>🏆 BẢNG XẾP HẠNG</h4>
+            <table style="width:100%; border-collapse: collapse;">
+                <tbody id="leaderboard-body"></tbody>
+            </table>
+        </div>
+    </div>
+    <div id="admin-panel">
+        <div class="admin-header">
+            <h2>💎 Quản Lý Hệ Thống</h2>
+            <span id="total-rate-display" style="font-weight:bold; font-size:12px">Tổng tỉ lệ: 100%</span>
+        </div>
+        <div class="admin-tabs">
+            <button class="tab-btn active" onclick="switchTab('players')">Người chơi</button>
+            <button class="tab-btn" onclick="switchTab('rates')">Tỉ lệ quay</button>
+        </div>
+        <div id="tab-players">
+            <div class="add-player-box">
+                <input type="text" id="new-player-name" placeholder="Tên người mới...">
+                <button class="btn-action btn-add-main" onclick="addNewPlayer()">➕ Thêm</button>
+            </div>
+            <table class="admin-table">
+                <thead><tr><th>Tên</th><th>Tiền</th><th>Lượt</th><th>Thao tác</th></tr></thead>
+                <tbody id="admin-user-list"></tbody>
+            </table>
+        </div>
+        <div id="tab-rates" style="display:none;">
+            <p style="font-size: 12px; color: red;">* Tổng các ô phải bằng 100% để hoạt động chính xác.</p>
+            <table class="admin-table">
+                <thead><tr><th>Số tiền</th><th>Tỉ lệ (%)</th></tr></thead>
+                <tbody id="admin-rate-list"></tbody>
+            </table>
+            <button class="btn-action btn-add-main" style="width:100%; margin-top:10px" onclick="saveRates()">💾 LƯU TỈ LỆ</button>
+        </div>
+        <button class="btn-close-admin" onclick="closeAdmin()">ĐÓNG QUẢN LÝ</button>
+    </div>
+    <script>
+        const firebaseConfig = { apiKey: "AIzaSyDVciC6GkMMMSyWI69pYpRwi0_3NkD9fuA", databaseURL: "https://farm-game-web-default-rtdb.asia-southeast1.firebasedatabase.app" };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
+        // Mật khẩu "2026" mã hóa Base64
+        const KEY_HASH = "MjAyNg=="; 
+        const prizes = [200000, 10000, 50000, 30000, 100000, 5000, 20000, 2000];
+        const colors = ["#FFD700", "#b30000", "#FFD700", "#b30000", "#FFD700", "#b30000", "#FFD700", "#b30000"];
+        let currentRotation = 0; let currentUser = null; let currentRates = [12.5, 12.5, 12.5, 12.5, 12.5, 12.5, 12.5, 12.5];
+
+        db.ref('settings/rates').on('value', (snap) => { if(snap.exists()) currentRates = snap.val(); renderRateTable(); });
+        db.ref('players').on('value', (snapshot) => { const players = snapshot.val() || {}; updateUI(players); if (currentUser) currentUser = players[currentUser.name]; });
+
+        function switchTab(tab) { document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none'; document.getElementById('tab-rates').style.display = tab === 'rates' ? 'block' : 'none'; document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.innerText.toLowerCase().includes(tab.slice(0,-1)))); }
+        function renderRateTable() { const list = document.getElementById('admin-rate-list'); let total = 0; list.innerHTML = prizes.map((p, i) => { total += currentRates[i]; return `<tr><td><b>${p.toLocaleString()}đ</b></td><td><input type="number" class="rate-input" data-index="${i}" value="${currentRates[i]}">%</td></tr>`; }).join(''); document.getElementById('total-rate-display').innerText = `Tổng tỉ lệ: ${total}%`; document.getElementById('total-rate-display').style.color = total === 100 ? "green" : "red"; }
+        function saveRates() { const inputs = document.querySelectorAll('.rate-input'); const newRates = Array.from(inputs).map(i => parseFloat(i.value) || 0); const total = newRates.reduce((a, b) => a + b, 0); if(total !== 100) return Swal.fire('Lỗi', 'Tổng tỉ lệ phải bằng đúng 100%!', 'error'); db.ref('settings/rates').set(newRates); Swal.fire('Thành công', 'Đã cập nhật tỉ lệ mới!', 'success'); }
+        function handleLogin() { const name = document.getElementById('username').value.trim(); if(!name) return; db.ref('players/' + name).once('value', (snapshot) => { if (!snapshot.exists()) return Swal.fire('Lỗi', 'Tên không có trong danh sách!', 'error'); currentUser = snapshot.val(); document.getElementById('login-screen').style.display = 'none'; document.getElementById('game-screen').style.display = 'block'; drawWheel(); }); }
+        function handleLogout() { currentUser = null; document.getElementById('username').value = ""; document.getElementById('game-screen').style.display = 'none'; document.getElementById('login-screen').style.display = 'block'; }
+        function updateUI(players) { if (currentUser && players[currentUser.name]) { const p = players[currentUser.name]; document.getElementById('user-name-display').innerText = p.name; document.getElementById('user-balance').innerText = p.balance.toLocaleString(); document.getElementById('user-spins-left').innerText = p.spinsLeft; document.getElementById('spin-btn').disabled = p.spinsLeft <= 0; } const sorted = Object.values(players).sort((a, b) => b.balance - a.balance).slice(0, 5); document.getElementById('leaderboard-body').innerHTML = sorted.map((p, i) => `<tr><td style="padding:10px">${i+1}. ${p.name}</td><td style="text-align:right">${p.balance.toLocaleString()}đ</td></tr>` ).join(''); refreshAdminList(players); }
+        function drawWheel() { const canvas = document.getElementById('canvas'); const ctx = canvas.getContext('2d'); const arc = Math.PI / (prizes.length / 2); ctx.clearRect(0,0,340,340); prizes.forEach((prize, i) => { const angle = i * arc; ctx.beginPath(); ctx.fillStyle = colors[i]; ctx.moveTo(170, 170); ctx.arc(170, 170, 170, angle, angle + arc); ctx.fill(); ctx.save(); ctx.translate(170, 170); ctx.rotate(angle + arc / 2); ctx.fillStyle = i % 2 === 0 ? "#800000" : "#fff"; ctx.font = "bold 16px Arial"; ctx.textAlign = "right"; ctx.fillText(prize.toLocaleString(), 150, 10); ctx.restore(); }); }
+        function startSpin() { if (!currentUser || currentUser.spinsLeft <= 0) return; const audio = document.getElementById('spinSound'); document.getElementById('spin-btn').disabled = true; audio.currentTime = 0; audio.play().catch(() => {}); let rand = Math.random() * 100; let cumulative = 0; let winIndex = 0; for (let i = 0; i < currentRates.length; i++) { cumulative += currentRates[i]; if (rand <= cumulative) { winIndex = i; break; } } const extraDeg = 7200; const prizeArc = 360 / prizes.length; const targetDeg = (360 - (winIndex * prizeArc) - (prizeArc / 2)) + 270; currentRotation += extraDeg + (targetDeg - (currentRotation % 360)); document.getElementById('wheel').style.transform = `rotate(${currentRotation}deg)`; setTimeout(() => { audio.pause(); const winAmount = prizes[winIndex]; db.ref('players/' + currentUser.name).update({ balance: currentUser.balance + winAmount, spinsLeft: currentUser.spinsLeft - 1 }); confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } }); Swal.fire({ title: '🧧 CHÚC MỪNG!', html: `Nhận lì xì: <b style="color:red; font-size:24px;">${winAmount.toLocaleString()}đ</b>`, icon: 'success' }); }, 20000); }
+        function addNewPlayer() { const name = document.getElementById('new-player-name').value.trim(); if (!name) return; db.ref('players/' + name).set({ name: name, balance: 0, spinsLeft: 1 }); document.getElementById('new-player-name').value = ""; }
+        function addSpin(name) { db.ref('players/' + name + '/spinsLeft').transaction(s => (s || 0) + 1); }
+        function deleteUser(name) { Swal.fire({ title: 'Xóa?', text: `Xóa ${name}?`, icon: 'warning', showCancelButton: true }).then((r) => { if (r.isConfirmed) db.ref('players/' + name).remove(); }); }
+        function refreshAdminList(players) { const list = document.getElementById('admin-user-list'); if (!list) return; list.innerHTML = Object.values(players).map(p => `<tr><td><b>${p.name}</b></td><td>${p.balance.toLocaleString()}đ</td><td>${p.spinsLeft}</td><td><button class="btn-action btn-plus-small" onclick="addSpin('${p.name}')">+1</button><button class="btn-action btn-del-small" onclick="deleteUser('${p.name}')">Xóa</button></td></tr>`).join(''); }
+        
+        // Hàm mở Admin đã sửa sang Base64
+        function openAdmin() {
+            const pass = prompt("Mật khẩu Admin:");
+            if (pass && btoa(pass) === KEY_HASH) {
+                document.getElementById('admin-panel').style.display = 'block';
+            } else if(pass) {
+                Swal.fire("Lỗi", "Sai mật khẩu!", "error");
+            }
+        }
+        function closeAdmin() { document.getElementById('admin-panel').style.display = 'none'; }
+        setInterval(() => { const lixi = document.createElement('div'); lixi.className = 'falling-envelope'; lixi.innerHTML = '🧧'; lixi.style.left = Math.random() * 100 + 'vw'; lixi.style.animationDuration = (Math.random() * 3 + 2) + 's'; document.body.appendChild(lixi); setTimeout(() => lixi.remove(), 5000); }, 400);
+    </script>
+</body>
+</html>

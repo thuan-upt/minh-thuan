@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Khai Xuân 2026 - Minh Thuận</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.17.1/firebase-database-compat.js"></script>
+    <style>
+        :root { --gold: #f1c40f; --red: #d63031; --white: #ffffff; --dark-red: #800000; }
+        * { box-sizing: border-box; }
+        body { background: #600000 radial-gradient(circle, #b30000 0%, #400000 100%); color: var(--gold); font-family: 'Segoe UI', Arial, sans-serif; margin: 0; padding: 0; min-height: 100vh; display: flex; flex-direction: column; align-items: center; overflow-x: hidden; }
+        .mai-header { width: 100%; height: 120px; background-image: url('https://img.pikbest.com/png-images/20240509/tet-holiday-apricot-blossom-decoration-transparent-background_10555325.png!sw800'); background-repeat: repeat-x; background-size: contain; position: relative; z-index: 10; }
+        .glowing-title { font-size: clamp(2rem, 8vw, 3.5rem); font-weight: 900; text-transform: uppercase; text-align: center; margin-top: -30px; color: #fff; text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--gold), 0 0 40px var(--gold), 0 0 70px var(--gold), 0 0 80px var(--gold); animation: glow 1.5s ease-in-out infinite alternate; letter-spacing: 5px; z-index: 11; }
+        @keyframes glow { from { text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px var(--gold); } to { text-shadow: 0 0 20px #fff, 0 0 30px #ffeb3b, 0 0 40px #ffeb3b, 0 0 60px var(--gold), 0 0 100px var(--gold); } }
+        .user-status-bar { display: flex; justify-content: center; align-items: center; gap: 20px; background: rgba(0,0,0,0.8); width: 95%; max-width: 900px; margin: 10px auto 25px auto; padding: 15px; border-radius: 50px; border: 2px solid var(--gold); flex-wrap: wrap; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); justify-content: center; justify-items: center; gap: 25px; width: 95%; max-width: 1200px; margin: 0 auto 50px auto; perspective: 1000px; }
+        .lixi-item { width: 150px; height: 220px; position: relative; cursor: pointer; transform-style: preserve-3d; transition: transform 0.8s; }
+        .lixi-item.opened { transform: rotateY(180deg); cursor: default; }
+        .lixi-front, .lixi-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 15px; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid var(--gold); }
+        .lixi-front { background: linear-gradient(135deg, #d63031 0%, #800000 100%); }
+        .lixi-front::after { content: "🧧"; font-size: 80px; filter: drop-shadow(0 5px 5px rgba(0,0,0,0.4)); }
+        .lixi-back { background: #fff; transform: rotateY(180deg); padding: 10px; text-align: center; color: #333; justify-content: space-between; }
+        .money-img { width: 100%; height: auto; border-radius: 5px; border: 1px solid #ddd; }
+        
+        /* Giao diện Admin */
+        #admin-panel { display: none; background: #fff; color: #333; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 95%; max-width: 850px; z-index: 2000; border-radius: 20px; padding: 25px; box-shadow: 0 0 100px #000; max-height: 85vh; overflow-y: auto; }
+        .admin-tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; cursor: pointer; border: none; background: #eee; border-radius: 10px; font-weight: bold; }
+        .tab-btn.active { background: var(--red); color: white; }
+        .admin-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        .admin-table td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        .edit-input { width: 100%; padding: 5px; border-radius: 5px; border: 1px solid #ccc; text-align: center; font-weight: bold; }
+        .main-btn { background: var(--gold); color: #800000; padding: 12px 40px; border: none; border-radius: 50px; font-weight: 900; cursor: pointer; font-size: 1.1rem; box-shadow: 0 4px 0 #b8860b; }
+        
+        .btn-home-admin {
+            display: block; width: 100%; margin-top: 15px; padding: 12px;
+            background: linear-gradient(135deg, #f1c40f 0%, #d4ac0d 100%);
+            color: #800000; border: none; border-radius: 10px;
+            font-weight: 800; text-decoration: none; text-align: center;
+            transition: 0.3s; box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+        }
+
+        #music-control { position: fixed; bottom: 20px; right: 20px; z-index: 1000; background: rgba(0,0,0,0.6); border: 1px solid var(--gold); border-radius: 50%; width: 45px; height: 45px; display: none; align-items: center; justify-content: center; cursor: pointer; color: var(--gold); font-size: 20px; box-shadow: 0 0 10px var(--gold); }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+    <audio id="bgMusic"></audio>
+    <div id="music-control" onclick="toggleMusic()">🔊</div>
+
+    <div class="mai-header"></div>
+    <div class="glowing-title">KHAI XUÂN 2026</div>
+    
+    <div id="login-screen" style="flex: 1; display: flex; align-items: center; justify-content: center; width: 100%;">
+        <div style="background: rgba(0,0,0,0.7); padding: 40px; border-radius: 30px; border: 3px solid var(--gold); text-align: center; max-width: 450px; width: 90%;">
+            <h3 style="color: var(--gold); margin-top: 0;">VUI XUÂN NHẬN LỘC</h3>
+            <input type="text" id="username" placeholder="Nhập tên của bạn..." style="padding: 12px; border-radius: 10px; width: 100%; text-align: center; margin-bottom: 20px;">
+            <br>
+            <button class="main-btn" onclick="handleLogin()">VÀO CHƠI</button>
+            <p onclick="openAdmin()" style="font-size:10px; cursor:pointer; opacity:0.2; margin-top:30px">⚙️ Quản lý hệ thống</p>
+        </div>
+    </div>
+
+    <div id="game-screen" style="display:none; width: 100%;">
+        <div class="user-status-bar">
+            <div class="status-item">Chào: <span id="user-name-display"></span></div>
+            <div class="status-item">Tiền: <span id="user-balance">0</span>đ</div>
+            <div class="status-item">Lượt: <span id="user-spins-left" style="color:#0f0">0</span></div>
+            <button onclick="location.reload()" style="background:none; border:1px solid var(--gold); color:var(--gold); border-radius:20px; padding:5px 15px; cursor:pointer;">ĐĂNG XUẤT</button>
+        </div>
+        <div class="grid-container" id="lixi-grid"></div>
+    </div>
+
+    <div id="admin-panel">
+        <h2 style="text-align:center; color: var(--red); margin-top: 0;">⚙️ QUẢN TRỊ VIÊN</h2>
+        <div class="admin-tabs">
+            <button class="tab-btn active" id="tab-p-btn" onclick="switchTab('players')">Người chơi</button>
+            <button class="tab-btn" id="tab-m-btn" onclick="switchTab('money')">Quản lý túi tiền</button>
+        </div>
+        <div id="tab-players">
+            <div style="display:flex; gap:10px; margin-bottom:15px">
+                <input type="text" id="new-player-name" placeholder="Tên người mới..." style="flex: 1; padding: 10px; border-radius: 10px; border: 1px solid #ccc;">
+                <button onclick="addNewPlayer()" style="background:#28a745; color:white; border:none; padding:10px 20px; border-radius:10px; cursor:pointer;">THÊM</button>
+            </div>
+            <table class="admin-table">
+                <thead><tr style="background:#eee"><th>Tên</th><th>Tiền</th><th>Lượt</th><th>Xóa</th></tr></thead>
+                <tbody id="admin-user-list"></tbody>
+            </table>
+        </div>
+        <div id="tab-money" style="display:none;">
+            <p style="color:red; font-size:12px; font-weight:bold; text-align:center;" id="count-status">* Tổng số tờ tiền phải là 50</p>
+            <table class="admin-table">
+                <thead><tr style="background:#eee"><th>Ô</th><th>Mệnh giá (VNĐ)</th><th>Số tờ</th></tr></thead>
+                <tbody id="admin-rate-list"></tbody>
+            </table>
+            <button onclick="saveSettings()" style="width:100%; margin-top:15px; padding:18px; background:blue; color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;">💾 LƯU & XÁO TRỘN TIỀN</button>
+        </div>
+        <a href="index.html" class="btn-home-admin">🏠 QUAY VỀ TRANG CHỦ</a>
+        <button onclick="closeAdmin()" style="width:100%; margin-top:10px; background:#333; color:white; border:none; padding:15px; border-radius:10px; font-weight:bold; cursor:pointer;">ĐÓNG</button>
+    </div>
+
+    <script>
+        (function(){
+            const config = { apiKey: "AIzaSyDVciC6GkMMMSyWI69pYpRwi0_3NkD9fuA", databaseURL: "https://farm-game-web-default-rtdb.asia-southeast1.firebasedatabase.app" };
+            firebase.initializeApp(config);
+            const db = firebase.database();
+            const ADMIN_HASH = "MjAyNg=="; 
+            
+            // DANH SÁCH NHẠC TỪ THƯ MỤC MP3 CỦA BẠN
+            const playlist = [
+                "mp3/Con Bướm Xuân.mp3",
+                "mp3/Nụ Cười Xuân (Lofi).mp3",
+                "mp3/Tết Bình An (Remix Short).mp3",
+                "mp3/Tết Đong Đầy.mp3",
+                "mp3/Tết Tung Bay.mp3"
+                
+            ];
+            let currentTrack = 0;
+            const audio = document.getElementById("bgMusic");
+
+            function playNextTrack() {
+                if (currentTrack >= playlist.length) currentTrack = 0;
+                audio.src = playlist[currentTrack];
+                audio.play().catch(e => console.log("Chờ tương tác để phát nhạc"));
+                currentTrack++;
+            }
+
+            audio.onended = playNextTrack;
+
+            window.toggleMusic = () => {
+                if (audio.paused) { audio.play(); document.getElementById("music-control").innerText = "🔊"; }
+                else { audio.pause(); document.getElementById("music-control").innerText = "🔇"; }
+            };
+
+            let currentUser = null;
+            let prizes = [200000, 100000, 50000, 20000, 10000, 5000, 2000, 1000];
+            let counts = [2, 5, 8, 10, 10, 5, 5, 5]; 
+            let shuffledMoney = [];
+            const moneyImages = { 1000: "http://upload.wikimedia.org/wikipedia/vi/9/9f/%C4%90%E1%BB%93ng_b%E1%BA%A1c_1000_%C4%91%E1%BB%93ng.jpeg", 2000: "https://cdn-img-v1.mybota.vn/upload/web/50/505223/product/2014/04/22/10/15/139813654156.jpg", 5000: "https://upload.wikimedia.org/wikipedia/vi/7/7c/%C4%90%E1%BB%93ng_b%E1%BA%A1c_5000_%C4%91%E1%BB%93ng.jpg", 10000: "https://www.anhnghethuatdulich.com/wp-content/uploads/2025/09/anh-tien-10k.jpg", 20000: "https://www.anhnghethuatdulich.com/wp-content/uploads/2025/09/anh-tien-20-nghin.jpg", 50000: "https://www.anhnghethuatdulich.com/wp-content/uploads/2025/09/anh-tien-50-nghin.jpg", 100000: "https://en.numista.com/catalogue/photos/viet_nam/64f38ae265ffd3.72692798-original.jpg", 200000: "https://www.anhnghethuatdulich.com/wp-content/uploads/2025/09/anh-tien-200-nghin.jpg" };
+
+            db.ref('settings').on('value', (s) => { if(s.exists()){ prizes = s.val().prizes || prizes; counts = s.val().counts || counts; shuffledMoney = s.val().shuffledMoney || []; renderRateTable(); } });
+            db.ref("players").on("value", (s) => { const p = s.val() || {}; updateUI(p); if(currentUser) currentUser = p[currentUser.name]; });
+
+            window.switchTab = (tab) => { document.getElementById('tab-players').style.display = tab === 'players' ? 'block' : 'none'; document.getElementById('tab-money').style.display = tab === 'money' ? 'block' : 'none'; document.getElementById('tab-p-btn').classList.toggle('active', tab === 'players'); document.getElementById('tab-m-btn').classList.toggle('active', tab === 'money'); };
+            window.renderRateTable = () => { document.getElementById('admin-rate-list').innerHTML = prizes.map((p, i) => `<tr><td>${i+1}</td><td><input type="number" class="p-edit edit-input" value="${p}"></td><td><input type="number" class="c-edit edit-input" value="${counts[i]}"></td></tr>`).join(''); const total = counts.reduce((a,b)=>a+b,0); document.getElementById('count-status').innerText = `* Tổng số tờ hiện tại: ${total} / 50`; document.getElementById('count-status').style.color = total === 50 ? "green" : "red"; };
+            window.saveSettings = () => { const np = Array.from(document.querySelectorAll('.p-edit')).map(i => parseInt(i.value)); const nc = Array.from(document.querySelectorAll('.c-edit')).map(i => parseInt(i.value)); if(nc.reduce((a,b)=>a+b,0) !== 50) return alert('Tổng số tờ tiền phải đúng bằng 50!'); let pool = []; np.forEach((price, idx) => { for(let k=0; k<nc[idx]; k++) pool.push(price); }); for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; } db.ref('settings').set({ prizes: np, counts: nc, shuffledMoney: pool }); Swal.fire('Thành công', 'Đã xáo trộn tiền!', 'success'); };
+            
+            window.handleLogin = () => { 
+                const n = document.getElementById("username").value.trim(); 
+                if(!n) return; 
+                db.ref("players/" + n).once("value", (s) => { 
+                    if(!s.exists()) return Swal.fire("Lỗi", "Tên không tồn tại!", "error"); 
+                    currentUser = s.val(); 
+                    document.getElementById("login-screen").style.display = "none"; 
+                    document.getElementById("game-screen").style.display = "block"; 
+                    document.getElementById("music-control").style.display = "flex";
+                    playNextTrack(); // Phát nhạc khi vào chơi
+                    createGrid(); 
+                }); 
+            };
+
+            window.createGrid = () => { const g = document.getElementById("lixi-grid"); g.innerHTML = ""; for(let i=1; i<=50; i++) { const d = document.createElement("div"); d.className = "lixi-item"; d.id = `lixi-${i}`; d.innerHTML = `<div class="lixi-front"></div><div class="lixi-back" id="back-${i}"></div>`; d.onclick = () => openLixi(i); g.appendChild(d); } };
+            window.openLixi = (id) => { const it = document.getElementById(`lixi-${id}`); if(!currentUser || currentUser.spinsLeft <= 0 || it.classList.contains("opened")) return; if(!shuffledMoney || shuffledMoney.length === 0) return Swal.fire("Lỗi", "Chưa xáo trộn tiền!", "error"); let win = shuffledMoney[id-1]; db.ref("players/" + currentUser.name).update({ balance: currentUser.balance + win, spinsLeft: currentUser.spinsLeft - 1 }); const b = document.getElementById(`back-${id}`); b.innerHTML = `<img src="${moneyImages[win]}" class="money-img"><p style="color:red;font-weight:800;margin:5px 0;">+${win.toLocaleString()}đ</p>`; it.classList.add("opened"); confetti({ particleCount: 150, spread: 70, origin: { y: 0.7 } }); };
+            window.updateUI = (p) => { if(currentUser && p[currentUser.name]){ const u = p[currentUser.name]; document.getElementById("user-name-display").innerText = u.name; document.getElementById("user-balance").innerText = u.balance.toLocaleString(); document.getElementById("user-spins-left").innerText = u.spinsLeft; } document.getElementById("admin-user-list").innerHTML = Object.values(p).map(u => `<tr><td>${u.name}</td><td>${u.balance.toLocaleString()}</td><td><button onclick="db.ref('players/${u.name}/spinsLeft').transaction(s=>(s||0)+1)">+1</button> ${u.spinsLeft}</td><td><button onclick="db.ref('players/${u.name}').remove()" style="color:red">X</button></td></tr>`).join(""); };
+            window.addNewPlayer = () => { const n = document.getElementById("new-player-name").value.trim(); if(n) { db.ref("players/" + n).set({ name: n, balance: 0, spinsLeft: 1 }); document.getElementById("new-player-name").value = ""; } };
+            window.openAdmin = () => { const p = prompt("Mã pin:"); if(p && btoa(p) === ADMIN_HASH) { document.getElementById("admin-panel").style.display = "block"; renderRateTable(); } else if(p) Swal.fire("Lỗi", "Sai mã pin!", "error"); };
+            window.closeAdmin = () => { document.getElementById("admin-panel").style.display = "none"; };
+        })();
+    </script>
+</body>
+</html>
