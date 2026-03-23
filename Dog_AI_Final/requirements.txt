@@ -4,3 +4,4 @@ timm
 rembg
 pillow
 streamlit
+gdown
