@@ -7,55 +7,56 @@ from PIL import Image
 from rembg import remove, new_session
 from torchvision import transforms
 
-# --- THÔNG TIN HỆ THỐNG ---
+# --- CẤU HÌNH ---
 FILE_ID = '1VhP5z4f2pAk4ip5dZ2YsgWwfKMM3OA1i' 
 MODEL_PATH = 'dog_swin_model.pth'
 
-st.set_page_config(page_title="AI Breed Scanner", page_icon="🐾")
+st.set_page_config(page_title="AI Dog & Fish Scanner", page_icon="🐾")
 
-# --- HÀM NẠP TÀI NGUYÊN (DÙNG CACHE ĐỂ TIẾT KIỆM RAM) ---
+# --- NẠP TÀI NGUYÊN TỐI ƯU ---
 @st.cache_resource
-def init_ai():
+def load_all():
     # 1. Tải model từ Drive nếu chưa có
     if not os.path.exists(MODEL_PATH):
         gdown.download(f'https://drive.google.com/uc?id={FILE_ID}', MODEL_PATH, quiet=False)
-
-    # 2. Nạp class_names (File này phải có trên GitHub của bạn)
-    classes = torch.load("class_names.pth", map_location="cpu")
+    
+    # 2. Nạp danh sách loài (Phải có file class_names.pth trên GitHub)
+    class_names = torch.load("class_names.pth", map_location="cpu")
     
     # 3. Khởi tạo Swin Transformer Tiny
-    net = timm.create_model('swin_tiny_patch4_window7_224', pretrained=False, num_classes=len(classes))
-    net.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
-    net.eval()
+    model = timm.create_model('swin_tiny_patch4_window7_224', pretrained=False, num_classes=len(class_names))
+    model.load_state_dict(torch.load(MODEL_PATH, map_location="cpu"))
+    model.eval()
     
-    # 4. Khởi tạo session tách nền bản rút gọn (u2netp) để không bị treo
-    rem_session = new_session("u2netp")
+    # 4. Session tách nền bản Lite (u2netp) - CỰC KỲ QUAN TRỌNG để tránh treo
+    session = new_session("u2netp") 
     
-    return net, classes, rem_session
+    return model, class_names, session
 
-# Thực thi khởi động
-try:
-    model, class_names, bg_session = init_ai()
-    st.sidebar.success("✅ AI System Ready")
-except Exception as e:
-    st.sidebar.error("⏳ Đang khởi tạo... Vui lòng đợi 1-2 phút")
+# Khởi động
+with st.spinner("Đang khởi tạo thuật toán AI..."):
+    try:
+        model, class_names, bg_session = load_all()
+        st.success("✅ Hệ thống đã sẵn sàng!")
+    except Exception as e:
+        st.error(f"⏳ Đang nạp dữ liệu... (Vui lòng đợi 1-2 phút hoặc nhấn F5)")
 
 # --- GIAO DIỆN ---
 st.title("🐾 AI Breed & Seafood Scanner")
 st.write("**Sinh viên thực hiện:** Minh Thuận (UPT)")
 
-file = st.file_uploader("Tải ảnh Chó hoặc Cá...", type=["jpg", "png", "jpeg"])
+file = st.file_uploader("Tải ảnh Chó hoặc Cá lên đây", type=["jpg", "png", "jpeg"])
 
 if file:
-    img = Image.open(file)
-    st.image(img, caption="Ảnh gốc", use_container_width=True)
+    img = Image.open(file).convert('RGB')
+    st.image(img, width=300)
     
-    if st.button("🚀 Bắt đầu Phân tích"):
-        with st.spinner("Đang tách nền và nhận diện..."):
-            # BƯỚC 1: TÁCH NỀN (U2-Netp)
+    if st.button('🚀 Bắt đầu Quét AI'):
+        with st.spinner('AI đang tách nền và nhận diện...'):
+            # Tách nền (U2-Netp)
             clean_img = remove(img, session=bg_session).convert('RGB')
             
-            # BƯỚC 2: TIỀN XỬ LÝ (TRANSFORM)
+            # Tiền xử lý (Transform)
             tf = transforms.Compose([
                 transforms.Resize((224, 224)),
                 transforms.ToTensor(),
@@ -63,14 +64,13 @@ if file:
             ])
             img_t = tf(clean_img).unsqueeze(0)
             
-            # BƯỚC 3: DỰ ĐOÁN (SWIN TRANSFORMER)
+            # Dự đoán (Swin Transformer)
             with torch.no_grad():
                 out = model(img_t)
                 prob = torch.nn.functional.softmax(out[0], dim=0)
                 conf, idx = torch.max(prob, 0)
             
-            # BƯỚC 4: KẾT QUẢ
             st.divider()
             st.success(f"### Kết quả: {class_names[idx].upper()}")
-            st.write(f"Độ tin cậy: **{conf.item()*100:.2f}%**")
+            st.write(f"Độ chính xác: **{conf.item()*100:.2f}%**")
             st.progress(float(conf.item()))
