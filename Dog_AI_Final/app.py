@@ -11,7 +11,7 @@ from torchvision import transforms
 FILE_ID = '1VhP5z4f2pAk4ip5dZ2YsgWwfKMM3OA1i' 
 MODEL_PATH = 'dog_swin_model.pth'
 
-st.set_page_config(page_title="UPT AI Breed Scanner", page_icon="🐾")
+st.set_page_config(page_title="AI Dog & Fish Scanner", page_icon="🐾")
 
 # --- NẠP TÀI NGUYÊN SIÊU NHẸ ---
 @st.cache_resource
@@ -34,29 +34,29 @@ def load_all():
     return model, class_names, session
 
 # Khởi chạy hệ thống
-with st.spinner("Hệ thống đang khởi động thuật toán cao cấp..."):
+with st.spinner("Hệ thống AI đang khởi động... Vui lòng đợi trong giây lát."):
     try:
         model, class_names, bg_session = load_all()
-        st.sidebar.success("✅ Hệ thống AI đã sẵn sàng!")
+        st.sidebar.success("✅ AI System Ready")
     except Exception as e:
-        st.sidebar.error("⏳ Đang nạp dữ liệu... Hãy đợi 1-2 phút.")
+        st.sidebar.warning("⏳ Đang nạp bộ não AI... (Thường mất 1-2 phút)")
 
 # --- GIAO DIỆN ---
 st.title("🐾 AI Breed & Seafood Scanner")
 st.write("**Sinh viên thực hiện:** Minh Thuận (UPT)")
 
-file = st.file_uploader("Tải ảnh Chó hoặc Cá...", type=["jpg", "png", "jpeg"])
+file = st.file_uploader("Tải ảnh Chó hoặc Cá lên đây", type=["jpg", "png", "jpeg"])
 
 if file:
     img = Image.open(file).convert('RGB')
-    st.image(img, width=300)
+    st.image(img, width=300, caption="Ảnh đầu vào")
     
     if st.button('🚀 Bắt đầu Quét AI'):
-        with st.spinner('AI đang tách nền và phân tích...'):
+        with st.spinner('AI đang tách nền và nhận diện đặc điểm...'):
             # Tách nền (U2-Netp)
             clean_img = remove(img, session=bg_session).convert('RGB')
             
-            # Tiền xử lý Swin Transformer
+            # Tiền xử lý (Transform)
             tf = transforms.Compose([
                 transforms.Resize((224, 224)),
                 transforms.ToTensor(),
@@ -64,7 +64,7 @@ if file:
             ])
             img_t = tf(clean_img).unsqueeze(0)
             
-            # Nhận diện đặc điểm sinh học
+            # Nhận diện đặc điểm sinh học với Swin Transformer
             with torch.no_grad():
                 out = model(img_t)
                 prob = torch.nn.functional.softmax(out[0], dim=0)
