@@ -20,7 +20,7 @@ def load_all():
     if not os.path.exists(MODEL_PATH):
         gdown.download(f'https://drive.google.com/uc?id={FILE_ID}', MODEL_PATH, quiet=False)
     
-    # 2. Nạp class names (File này phải nằm trên GitHub của bạn)
+    # 2. Nạp class names (Đảm bảo file này nằm trên GitHub của bạn)
     class_names = torch.load("class_names.pth", map_location="cpu")
     
     # 3. Khởi tạo Swin Transformer Tiny (Bản nhẹ nhất)
@@ -34,7 +34,7 @@ def load_all():
     return model, class_names, session
 
 # Khởi chạy hệ thống
-with st.spinner("Hệ thống AI đang khởi động... Vui lòng đợi trong giây lát."):
+with st.spinner("Hệ thống AI đang khởi động... Vui lòng đợi."):
     try:
         model, class_names, bg_session = load_all()
         st.sidebar.success("✅ AI System Ready")
@@ -64,7 +64,7 @@ if file:
             ])
             img_t = tf(clean_img).unsqueeze(0)
             
-            # Nhận diện đặc điểm sinh học với Swin Transformer
+            # Nhận diện với Swin Transformer
             with torch.no_grad():
                 out = model(img_t)
                 prob = torch.nn.functional.softmax(out[0], dim=0)
