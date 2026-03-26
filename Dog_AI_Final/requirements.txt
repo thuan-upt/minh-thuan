@@ -1,6 +1,7 @@
-streamlit
-torch
-torchvision
-timm
-pillow
+torch==2.1.0
+torchvision==0.16.0
+timm==0.9.7
+rembg==2.0.52
+pillow==10.0.0
+streamlit==1.28.0
 gdown
